@@ -190,9 +190,9 @@ end
 function SWEP:MeleeHit(ent, trace, damage, forcescale)
 
 	if ent:IsPlayer() then
-		self:MeleeHitPlayer(ent, trace, finalDamage, forcescale)
+		self:MeleeHitPlayer(ent, trace, damage, forcescale)
 	else
-		self:MeleeHitEntity(ent, trace, finalDamage, forcescale)
+		self:MeleeHitEntity(ent, trace, damage, forcescale)
 	end
 
 	self:ApplyMeleeDamage(ent, trace, damage)
