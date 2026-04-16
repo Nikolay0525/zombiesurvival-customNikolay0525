@@ -1,5 +1,6 @@
 INC_SERVER()
 
+
 function SWEP:Deploy()
 	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 

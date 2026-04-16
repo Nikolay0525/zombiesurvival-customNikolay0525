@@ -69,22 +69,7 @@ net.Receive("zs_skills_remort", function(length, pl)
 end)
 
 net.Receive("zs_skills_reset", function(length, pl)
-	if pl:GetZSLevel() < 10 then
-		pl:SkillNotify("You must be level 10 to reset your skills.")
-		return
-	end
-
-	local time = os.time()
-	if pl.NextSkillReset and time < pl.NextSkillReset then
-		pl:SkillNotify("You must wait before resetting your skills again.")
-		return
-	end
-
 	pl:SkillsReset()
-
-	net.Start("zs_skills_nextreset")
-		net.WriteUInt(pl.NextSkillReset - time, 32)
-	net.Send(pl)
 end)
 
 net.Receive("zs_skills_refunded", function(length, pl)
@@ -257,7 +242,7 @@ end
 function meta:SkillsReset()
 	self:SetUnlockedSkills({})
 	self:SetDesiredActiveSkills({})
-	self.NextSkillReset = os.time() + 604800 -- 1 week
+	self.NextSkillReset = nil
 
 	self:CenterNotify(COLOR_CYAN, translate.ClientGet(self, "you_have_reset_all"))
 end

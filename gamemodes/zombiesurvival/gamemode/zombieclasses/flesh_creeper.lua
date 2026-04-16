@@ -8,6 +8,8 @@ CLASS.Hidden = true
 CLASS.Unlocked = true
 CLASS.NotRandomStart = true
 
+CLASS.IsHeadcrab = true
+
 CLASS.Health = 175
 CLASS.SWEP = "weapon_zs_fleshcreeper"
 CLASS.Model = Model("models/antlion.mdl")
@@ -21,7 +23,7 @@ CLASS.VoicePitch = 0.55
 CLASS.PainSounds = {Sound("npc/barnacle/barnacle_pull1.wav"), Sound("npc/barnacle/barnacle_pull2.wav"), Sound("npc/barnacle/barnacle_pull3.wav"), Sound("npc/barnacle/barnacle_pull4.wav")}
 CLASS.DeathSounds = {Sound("npc/barnacle/barnacle_die1.wav"), Sound("npc/barnacle/barnacle_die2.wav")}
 
-CLASS.ModelScale = 0.65
+CLASS.ModelScale = 0.75
 --[[CLASS.ModelScale = 0.6324555
 CLASS.ClientsideModelScale = 0.4 / CLASS.ModelScale]]
 

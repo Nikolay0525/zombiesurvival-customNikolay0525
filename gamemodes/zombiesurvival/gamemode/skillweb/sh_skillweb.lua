@@ -1,24 +1,28 @@
 include("registry.lua")
 
--- These are inverse functions of eachother!
+-- МНОЖНИК ДОСВІДУ
+-- Було 16. Чим МЕНШЕ це число, тим ШВИДШЕ йде прокачка.
+-- Наприклад: 8 = вдвічі швидше; 10 = трохи швидше; 4 = дуже швидко.
+local XP_MULTIPLIER = 8 
+
 function GM:LevelForXP(xp)
-	--return math.floor(1 + 1 * math.sqrt(xp))
-	return math.floor(1 + 0.25 * math.sqrt(xp))
+    -- Рахуємо рівень з огляду на множник
+    return math.floor(1 + math.sqrt(xp / XP_MULTIPLIER))
 end
 
 function GM:XPForLevel(level)
-	--return level * level - 2 * level + 1
-	return 16 * level * level - 32 * level + 16
+    -- Рахуємо необхідний досвід (математично це те саме, що level*level - 2*level + 1, але помножене)
+    return XP_MULTIPLIER * math.pow(level - 1, 2)
 end
 
 function GM:ProgressForXP(xp)
-	local current_level = self:LevelForXP(xp)
-	if current_level >= self.MaxLevel then return 1 end
+    local current_level = self:LevelForXP(xp)
+    if current_level >= self.MaxLevel then return 1 end
 
-	local current_level_xp = self:XPForLevel(current_level)
-	local next_level_xp = self:XPForLevel(current_level + 1)
+    local current_level_xp = self:XPForLevel(current_level)
+    local next_level_xp = self:XPForLevel(current_level + 1)
 
-	return (xp - current_level_xp) / (next_level_xp - current_level_xp)
+    return (xp - current_level_xp) / (next_level_xp - current_level_xp)
 end
 
 GM.MaxLevel = 50

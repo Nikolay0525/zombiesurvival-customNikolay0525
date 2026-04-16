@@ -144,6 +144,8 @@ local P_Alive = M_Player.Alive
 local player_GetAll = player.GetAll
 local P_GetPhantomHealth = M_Player.GetPhantomHealth
 
+local didBeaconSpawnedYet = false
+
 function GM:WorldHint(hint, pos, ent, lifetime, filter)
 	net.Start("zs_worldhint")
 		net.WriteString(hint)
@@ -1729,6 +1731,7 @@ GM.PreviouslyDied = {}
 GM.StoredUndeadFrags = {}
 
 function GM:RestartLua()
+	didBeaconSpawnedYet = false
 	self.CachedHMs = nil
 	self.TheLastHuman = nil
 	self.LastBossZombieSpawned = nil
@@ -4163,6 +4166,22 @@ function GM:PlayerSpawn(pl)
 	wcol.y = math.Clamp(wcol.y, 0, 2.5)
 	wcol.z = math.Clamp(wcol.z, 0, 2.5)
 	pl:SetWeaponColor(wcol)
+
+	if not didBeaconSpawnedYet and not self.ZombieEscape then
+		didBeaconSpawnedYet = true
+		local spawn = self:PlayerSelectSpawn(pl)
+
+		if spawn and spawn:IsValid() then
+			local ent = ents.Create("prop_messagebeacon")
+			if ent:IsValid() then
+				ent:SetPos(spawn:GetPos() + Vector(0, 0, 8))
+				ent:Spawn()
+				ent:DropToFloor()
+				ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+				ent.NoTakeOwnership = true
+			end
+		end
+	end
 end
 
 function GM:SetWave(wave)
@@ -4248,11 +4267,33 @@ function GM:WaveStateChanged(newstate)
 				end
 
 				if not have and #humans >= 1 then
-					local spawn = self:PlayerSelectSpawn(humans[math.random(#humans)])
-					if spawn and spawn:IsValid() then
+					local spawnA = self:PlayerSelectSpawn(humans[math.random(#humans)])
+					local spawnB = self:PlayerSelectSpawn(humans[math.random(#humans)])
+					local spawnC = self:PlayerSelectSpawn(humans[math.random(#humans)])
+					if spawnA and spawnA:IsValid() then
 						local ent = ents.Create("prop_arsenalcrate")
 						if ent:IsValid() then
-							ent:SetPos(spawn:GetPos() + Vector(0, 0, 8))
+							ent:SetPos(spawnA:GetPos() + Vector(0, 0, 8))
+							ent:Spawn()
+							ent:DropToFloor()
+							ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+							ent.NoTakeOwnership = true
+						end
+					end
+					if spawnB and spawnB:IsValid() then
+						local ent = ents.Create("prop_resupplybox")
+						if ent:IsValid() then
+							ent:SetPos(spawnB:GetPos() + Vector(0, 0, 16))
+							ent:Spawn()
+							ent:DropToFloor()
+							ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+							ent.NoTakeOwnership = true
+						end
+					end
+					if spawnC and spawnC:IsValid() then
+						local ent = ents.Create("prop_remantler")
+						if ent:IsValid() then
+							ent:SetPos(spawnC:GetPos() + Vector(0, 0, 16))
 							ent:Spawn()
 							ent:DropToFloor()
 							ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
