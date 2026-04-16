@@ -713,6 +713,11 @@ cvars.AddChangeCallback("zs_zombieprojeffectsmul", function(cvar, oldvalue, newv
     GAMEMODE.ZombieProjEffectsMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
 end) 
 
+GM.ResupplyAmmoMul = math.Round(CreateConVar("zs_resupplyammomul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Amount of ammo you gain when take from resupply."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_resupplyammomul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ResupplyAmmoMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
 -- Static values that don't need convars...
 
 -- Initial length for wave 1.
@@ -734,13 +739,13 @@ GM.WaveZeroLength = 150
 GM.WaveIntermissionLength = 60
 
 -- Time in seconds between end round and next map.
-GM.EndGameTime = 45
+GM.EndGameTime = 30
 
 -- How many clips of ammo guns from the Worth menu start with. Some guns such as shotguns and sniper rifles have multipliers on this.
 GM.SurvivalClips = 4 --2
 
 -- How long do humans have to wait before being able to get more ammo from a resupply box?
-GM.ResupplyBoxCooldown = 30 -- experiment
+GM.ResupplyBoxCooldown = 60 
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
 GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")

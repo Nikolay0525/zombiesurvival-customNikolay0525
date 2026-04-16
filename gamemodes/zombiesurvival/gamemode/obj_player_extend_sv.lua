@@ -941,7 +941,7 @@ function meta:Resupply(owner, obj)
 	end
 
 	local ammotype = self:GetResupplyAmmoType()
-	local amount = GAMEMODE.AmmoCache[ammotype]
+	local amount = math.ceil(GAMEMODE.AmmoCache[ammotype] * (GAMEMODE.ResupplyAmmoMul or 1))
 
 	for i = 1, stockpiling and not stowage and 2 or 1 do
 		net.Start("zs_ammopickup")
