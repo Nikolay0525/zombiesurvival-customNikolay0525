@@ -15,7 +15,7 @@ CLASS.Points = 40
 
 CLASS.SWEP = "weapon_zs_shitslapper"
 
-CLASS.Health = 4000
+CLASS.Health = math.Round(4000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 225
 CLASS.JumpPower = 200
 

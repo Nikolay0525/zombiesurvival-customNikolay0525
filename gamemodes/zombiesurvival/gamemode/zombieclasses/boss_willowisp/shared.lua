@@ -15,7 +15,7 @@ CLASS.Model = Model("models/dav0r/hoverball.mdl")
 
 CLASS.SWEP = "weapon_zs_special_wow"
 
-CLASS.Health = 1000
+CLASS.Health = math.Round(1000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 240
 CLASS.JumpPower = 0
 

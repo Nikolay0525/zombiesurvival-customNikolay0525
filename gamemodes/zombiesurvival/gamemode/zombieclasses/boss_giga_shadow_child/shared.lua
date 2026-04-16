@@ -7,7 +7,7 @@ CLASS.Help = "controls_giga_shadow_child"
 
 CLASS.Boss = true
 
-CLASS.Health = 2000
+CLASS.Health = math.Round(2000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 235
 
 CLASS.Points = 35

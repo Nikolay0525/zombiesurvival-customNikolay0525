@@ -10,7 +10,7 @@ CLASS.Hidden = true
 CLASS.Disabled = true
 CLASS.Unlocked = true
 
-CLASS.Health = 130
+CLASS.Health = math.Round(130 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 
 CLASS.UsePlayerModel = true

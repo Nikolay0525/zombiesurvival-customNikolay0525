@@ -15,7 +15,7 @@ CLASS.Model = Model("models/headcrab.mdl")
 
 CLASS.SWEP = "weapon_zs_extinctioncrab"
 
-CLASS.Health = 1900
+CLASS.Health = math.Round(1900 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 250
 --CLASS.JumpPower = 160
 

@@ -15,7 +15,7 @@ CLASS.Points = 40
 
 CLASS.SWEP = "weapon_zs_asskicker"
 
-CLASS.Health = 2500
+CLASS.Health = math.Round(2500 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 240
 CLASS.JumpPower = 260
 

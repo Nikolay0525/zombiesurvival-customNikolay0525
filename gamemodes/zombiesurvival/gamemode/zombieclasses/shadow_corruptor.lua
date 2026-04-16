@@ -9,7 +9,7 @@ CLASS.Help = "controls_shadow_corruptor"
 
 CLASS.Wave = 6 / 6
 
-CLASS.Health = 100
+CLASS.Health = math.Round(100 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 150
 
 CLASS.Points = 5

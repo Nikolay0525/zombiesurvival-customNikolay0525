@@ -11,7 +11,7 @@ CLASS.Threshold = 0
 CLASS.Unlocked = true
 CLASS.Hidden = true
 
-CLASS.Health = 100
+CLASS.Health = math.Round(100 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 130
 CLASS.JumpPower = 120
 

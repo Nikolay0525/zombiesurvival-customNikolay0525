@@ -693,6 +693,26 @@ cvars.AddChangeCallback("zs_roundlimit", function(cvar, oldvalue, newvalue)
 	GAMEMODE.RoundLimit = tonumber(newvalue) or 3
 end)
 
+GM.ZombieMeleeHitDamageMul = math.Round(CreateConVar("zs_zombiemeleehitdamagemul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Scales the amount of melee damage that zombies deal."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombiemeleehitdamagemultiplier", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieMeleeHitDamageMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ZombieMaxHealthMul = math.Round(CreateConVar("zs_zombiemaxhealthmul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Health will be mul on this value."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombiemaxhealthmul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieMaxHealthMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ZombieProjHitDamageMul = math.Round(CreateConVar("zs_zombieprojhitdamagemul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Damage of projectiles like poison mess, will be mul on this value."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombieprojhitdamagemul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieProjHitDamageMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ZombieProjEffectsMul = math.Round(CreateConVar("zs_zombieprojeffectsmul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Amount of effect made by projectiles not related to damage will be mul on this."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombieprojeffectsmul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieProjEffectsMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
 -- Static values that don't need convars...
 
 -- Initial length for wave 1.
@@ -720,7 +740,7 @@ GM.EndGameTime = 45
 GM.SurvivalClips = 4 --2
 
 -- How long do humans have to wait before being able to get more ammo from a resupply box?
-GM.ResupplyBoxCooldown = 60
+GM.ResupplyBoxCooldown = 30 -- experiment
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
 GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")

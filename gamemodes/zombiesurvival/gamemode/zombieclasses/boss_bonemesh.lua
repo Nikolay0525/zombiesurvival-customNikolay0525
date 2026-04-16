@@ -9,7 +9,7 @@ CLASS.KnockbackScale = 0
 
 CLASS.CanTaunt = true
 
-CLASS.Health = 2000
+CLASS.Health = math.Round(2000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 195
 
 CLASS.FearPerInstance = 1

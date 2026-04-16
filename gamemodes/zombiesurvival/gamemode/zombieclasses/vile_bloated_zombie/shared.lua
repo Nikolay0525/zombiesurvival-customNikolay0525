@@ -9,7 +9,7 @@ CLASS.BetterVersion = "Poison Zombie"
 
 CLASS.Wave = 3 / 6
 
-CLASS.Health = 350
+CLASS.Health = math.Round(350 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 135
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

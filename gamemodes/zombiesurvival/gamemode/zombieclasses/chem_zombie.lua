@@ -9,7 +9,7 @@ CLASS.Help = "controls_chem_zombie"
 
 CLASS.Wave = 6 / 6
 --CLASS.Sanity = 2 / 3
-CLASS.Health = 100
+CLASS.Health = math.Round(100 * (GM.ZombieMaxHealthMul or 1))
 CLASS.SWEP = "weapon_zs_chemzombie"
 CLASS.Model = Model("models/Zombie/Poison.mdl")
 CLASS.Speed = 160

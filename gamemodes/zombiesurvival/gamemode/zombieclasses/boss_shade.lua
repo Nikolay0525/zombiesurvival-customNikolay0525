@@ -16,7 +16,7 @@ CLASS.NoAdjustPhysDamage = true
 
 CLASS.CanTaunt = true
 
-CLASS.Health = 1500 --1200
+CLASS.Health = math.Round(1500 * (GM.ZombieMaxHealthMul or 1)) --1200
 CLASS.Speed = 170 --125
 
 CLASS.FearPerInstance = 1

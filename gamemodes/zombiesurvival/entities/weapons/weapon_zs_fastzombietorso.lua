@@ -10,6 +10,8 @@ SWEP.MeleeDelay = 0.25
 SWEP.MeleeDamage = 18
 SWEP.SwingAnimSpeed = 2.4
 
+
+
 function SWEP:PlayHitSound()
 	self:EmitSound("NPC_FastZombie.AttackHit", nil, nil, nil, CHAN_AUTO)
 end

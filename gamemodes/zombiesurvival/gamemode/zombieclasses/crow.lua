@@ -2,7 +2,7 @@ CLASS.Name = "Crow"
 CLASS.TranslationName = "class_crow"
 CLASS.Description = "description_crow"
 
-CLASS.Health = 5
+CLASS.Health = math.Round(5 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Wave = 0
 CLASS.Threshold = 0
 CLASS.SWEP = "weapon_zs_crow"

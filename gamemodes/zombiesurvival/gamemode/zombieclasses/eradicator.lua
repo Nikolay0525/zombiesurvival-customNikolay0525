@@ -5,7 +5,7 @@ CLASS.Help = "controls_eradicator"
 
 CLASS.Wave = 6 / 6
 
-CLASS.Health = 410
+CLASS.Health = math.Round(410 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 150
 
 CLASS.CanTaunt = true

@@ -10,7 +10,7 @@ CLASS.Model = Model("models/player/zombie_lacerator2.mdl")
 
 CLASS.Wave = 4 / 6
 
-CLASS.Health = 225
+CLASS.Health = math.Round(225 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 270
 CLASS.SWEP = "weapon_zs_lacerator"
 

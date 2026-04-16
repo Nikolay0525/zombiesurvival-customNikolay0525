@@ -5,7 +5,7 @@ CLASS.Hidden = true
 CLASS.Name = "Super Zombie"
 CLASS.TranslationName = "class_super_zombie"
 
-CLASS.Health = 1500
+CLASS.Health = math.Round(1500 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = SPEED_ZOMBIEESCAPE_ZOMBIE
 CLASS.Points = 5
 

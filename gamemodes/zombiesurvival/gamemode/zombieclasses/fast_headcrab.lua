@@ -11,7 +11,7 @@ CLASS.Wave = 2 / 6
 
 CLASS.SWEP = "weapon_zs_fastheadcrab"
 
-CLASS.Health = 40
+CLASS.Health = math.Round(40 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 230
 CLASS.JumpPower = 100
 

@@ -5,7 +5,7 @@ CLASS.Help = "controls_skeletal_shambler"
 
 CLASS.Wave = 5 / 6
 
-CLASS.Health = 180
+CLASS.Health = math.Round(180 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 155
 
 CLASS.CanTaunt = true

@@ -7,7 +7,7 @@ CLASS.Boss = true
 
 CLASS.KnockbackScale = 0
 
-CLASS.Health = 2500
+CLASS.Health = math.Round(2500 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 230
 
 CLASS.Points = 40

@@ -17,7 +17,7 @@ CLASS.Wave = 2 / 6
 CLASS.Unlocked = false
 CLASS.Hidden = false
 
-CLASS.Health = 75
+CLASS.Health = math.Round(75 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 155
 CLASS.JumpPower = 160
 

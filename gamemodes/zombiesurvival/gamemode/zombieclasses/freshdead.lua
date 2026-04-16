@@ -7,7 +7,7 @@ CLASS.Wave = 0
 CLASS.Unlocked = true
 CLASS.Hidden = true
 
-CLASS.Health = 100
+CLASS.Health = math.Round(100 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 195
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
