@@ -189,17 +189,13 @@ end
 
 function SWEP:MeleeHit(ent, trace, damage, forcescale)
 
-	local damageMul = GAMEMODE.ZombieMeleeHitDamageMul or 1
-
-	local finalDamage = damage * damageMul
-
 	if ent:IsPlayer() then
-		self:MeleeHitPlayer(ent, trace, finalDamage, forcescale)
+		self:MeleeHitPlayer(ent, trace, damage, forcescale)
 	else
-		self:MeleeHitEntity(ent, trace, finalDamage, forcescale)
+		self:MeleeHitEntity(ent, trace, damage, forcescale)
 	end
 
-	self:ApplyMeleeDamage(ent, trace, finalDamage)
+	self:ApplyMeleeDamage(ent, trace, damage)
 end
 
 function SWEP:MeleeHitEntity(ent, trace, damage, forcescale)
