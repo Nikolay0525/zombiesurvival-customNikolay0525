@@ -3,7 +3,7 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_butcherknife"
 
 SWEP.ZombieOnly = true
-SWEP.MeleeDamage = 28
+SWEP.MeleeDamage = math.Round(28 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.OriginalMeleeDamage = SWEP.MeleeDamage
 SWEP.Primary.Delay = 0.45
 

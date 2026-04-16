@@ -14,7 +14,7 @@ SWEP.MeleeReach = 78
 SWEP.MeleeForceScale = 1.45
 SWEP.MeleeSize = 4.5
 SWEP.Primary.Delay = 1.35
-SWEP.MeleeDamage = 38
+SWEP.MeleeDamage = math.Round(38 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.AlertDelay = 3.2
 
 SWEP.SwingAnimSpeed = 0.58

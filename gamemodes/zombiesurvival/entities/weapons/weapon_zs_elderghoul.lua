@@ -4,8 +4,8 @@ SWEP.PrintName = "Elder Ghoul"
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 26
-SWEP.MeleeDamageVsProps = 22
+SWEP.MeleeDamage = math.Round(26 * (GAMEMODE.ZombieOverallDamageMul or 1))
+SWEP.MeleeDamageVsProps = math.Round(22 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 0.5
 SWEP.SlowDownScale = 0.25
 

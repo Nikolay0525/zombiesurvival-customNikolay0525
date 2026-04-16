@@ -7,14 +7,14 @@ SWEP.PrintName = "Charger"
 SWEP.ViewModel = Model("models/weapons/v_pza.mdl")
 
 SWEP.MeleeDelay = 0.8
-SWEP.MeleeDamage = 23
-SWEP.BleedDamage = 10
-SWEP.MeleeDamageVsProps = 23
+SWEP.MeleeDamage = math.Round(23 * (GAMEMODE.ZombieOverallDamageMul or 1))
+SWEP.BleedDamage = math.Round(10 * (GAMEMODE.ZombieOverallDamageMul or 1))
+SWEP.MeleeDamageVsProps = math.Round(23 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.Primary.Delay = 1.5
 
 SWEP.SwingAnimSpeed = 0.6
 
-SWEP.ChargeDamage = 30
+SWEP.ChargeDamage = math.Round(30 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.ChargeDamageVsPlayerMul = 0.8333
 SWEP.ChargeReach = 26
 SWEP.ChargeSize = 12

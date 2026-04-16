@@ -13,16 +13,16 @@ end
 
 SWEP.MeleeDelay = 0
 SWEP.MeleeReach = 42
-SWEP.MeleeDamage = 7 --8
+SWEP.MeleeDamage = math.Round(7 * (GAMEMODE.ZombieOverallDamageMul or 1)) --8
 SWEP.MeleeForceScale = 0.1
 SWEP.MeleeSize = 4.5 --1.5
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.Primary.Delay = 0.32
 
 SWEP.SlowMeleeDelay = 0.8
-SWEP.SlowMeleeDamage = 18
+SWEP.SlowMeleeDamage = math.Round(18 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
-SWEP.PounceDamage = 20
+SWEP.PounceDamage = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.PounceDamageVsPlayerMul = 0.2
 SWEP.PounceDamageType = DMG_IMPACT
 SWEP.PounceReach = 26

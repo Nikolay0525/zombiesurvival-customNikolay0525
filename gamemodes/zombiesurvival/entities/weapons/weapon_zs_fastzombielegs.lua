@@ -8,7 +8,7 @@ SWEP.Primary.Delay = 1
 
 SWEP.MeleeDelay = 0.25
 SWEP.MeleeReach = 38
-SWEP.MeleeDamage = 14
+SWEP.MeleeDamage = math.Round(14 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 SWEP.DelayWhenDeployed = true
 

@@ -2,7 +2,7 @@ SWEP.Base = "weapon_zs_poisonheadcrab"
 
 SWEP.PrintName = "Barbed Headcrab"
 
-SWEP.PounceDamage = 36
+SWEP.PounceDamage = math.Round(36 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 function SWEP:Think()
 	local curtime = CurTime()

@@ -2,7 +2,7 @@ SWEP.Base = "weapon_zs_gigagorechild"
 
 SWEP.PrintName = "Giga Shadow Child"
 
-SWEP.MeleeDamage = 24
+SWEP.MeleeDamage = math.Round(24 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 1
 
 function SWEP:PrimaryAttack()

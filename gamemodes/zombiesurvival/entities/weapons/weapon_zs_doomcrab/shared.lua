@@ -21,7 +21,7 @@ SWEP.HitRecovery = 1
 
 SWEP.AttackTime = 1.875
 SWEP.AttackProcessTime = 1.35
---[[SWEP.AttackDamage = 40
+--[[SWEP.AttackDamage = math.Round(40 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.AttackDamageType = DMG_BLUNT
 
 SWEP.MeleeReach = 64

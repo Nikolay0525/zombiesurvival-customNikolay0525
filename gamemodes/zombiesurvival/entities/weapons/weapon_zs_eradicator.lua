@@ -4,7 +4,7 @@ SWEP.PrintName = "Eradicator"
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 36
+SWEP.MeleeDamage = math.Round(36 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.SlowDownScale = 0
 
 SWEP.AlertDelay = 3.5

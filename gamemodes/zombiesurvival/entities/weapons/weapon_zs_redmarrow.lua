@@ -6,8 +6,8 @@ end
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 30
---SWEP.MeleeDamageShielded = 20
+SWEP.MeleeDamage = math.Round(30 * (GAMEMODE.ZombieOverallDamageMul or 1))
+--SWEP.MeleeDamageShielded = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 --[[function SWEP:MeleeHit(ent, trace, damage, forcescale)
 	local owner = self:GetOwner()

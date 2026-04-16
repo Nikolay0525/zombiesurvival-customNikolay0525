@@ -4,7 +4,7 @@ SWEP.Base = "weapon_zs_headcrab"
 
 SWEP.PrintName = "Bloodsucker Headcrab"
 
-SWEP.PounceDamage = 6
+SWEP.PounceDamage = math.Round(6 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 SWEP.NoHitRecovery = 0.6
 SWEP.HitRecovery = 0.75

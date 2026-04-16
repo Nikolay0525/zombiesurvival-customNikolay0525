@@ -4,7 +4,7 @@ SWEP.Base = "weapon_zs_zombie"
 
 SWEP.PrintName = "Skeletal Shambler"
 
-SWEP.MeleeDamage = 33
+SWEP.MeleeDamage = math.Round(33 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 function SWEP:Reload()
 	self:SecondaryAttack()

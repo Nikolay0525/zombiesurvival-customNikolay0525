@@ -18,7 +18,7 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo	= "none"
 
-SWEP.PounceDamage = 34
+SWEP.PounceDamage = math.Round(34 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.PounceWindUp = 0.9
 SWEP.SilentPounceWindUp = 2.1
 SWEP.SpitWindUp = 0.8

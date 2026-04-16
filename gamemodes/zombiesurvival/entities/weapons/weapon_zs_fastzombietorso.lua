@@ -7,7 +7,7 @@ SWEP.PrintName = "Fast Zombie Torso"
 SWEP.ViewModel = Model("models/weapons/v_fza.mdl")
 
 SWEP.MeleeDelay = 0.25
-SWEP.MeleeDamage = 18
+SWEP.MeleeDamage = math.Round(18 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.SwingAnimSpeed = 2.4
 
 

@@ -7,11 +7,11 @@ SWEP.PrintName = "Slingshot Zombie Torso"
 SWEP.ViewModel = Model("models/weapons/v_fza.mdl")
 
 SWEP.MeleeDelay = 0.25
-SWEP.MeleeDamage = 20
+SWEP.MeleeDamage = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeReach = 40
 SWEP.SwingAnimSpeed = 2.4
 
-SWEP.PounceDamage = 20
+SWEP.PounceDamage = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.PounceDamageVsPlayerMul = 0.75
 SWEP.PounceReach = 26
 SWEP.PounceSize = 12

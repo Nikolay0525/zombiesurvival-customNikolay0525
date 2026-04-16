@@ -16,7 +16,7 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo	= "none"
 
-SWEP.PounceDamage = 8
+SWEP.PounceDamage = math.Round(8 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.PounceDamageType = DMG_SLASH
 
 SWEP.NoHitRecovery = 0.75

@@ -4,7 +4,7 @@ SWEP.Base = "weapon_zs_zombie"
 
 SWEP.PrintName = "Agile Dead"
 
-SWEP.MeleeDamage = 20
+SWEP.MeleeDamage = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.Primary.Delay = 1.2
 
 function SWEP:Reload()

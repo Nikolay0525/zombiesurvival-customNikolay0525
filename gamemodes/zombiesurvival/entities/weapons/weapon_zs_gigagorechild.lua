@@ -14,7 +14,7 @@ if CLIENT then
 end
 
 SWEP.MeleeReach = 90
-SWEP.MeleeDamage = 32
+SWEP.MeleeDamage = math.Round(32 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 2
 SWEP.MeleeSize = 5 --3
 SWEP.MeleeDamageType = DMG_SLASH
