@@ -748,16 +748,16 @@ GM.SurvivalClips = 4 --2
 GM.ResupplyBoxCooldown = 60 
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
-GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")
+GM.LastHumanSound = Sound("zombiesurvival/custom/lasthuman" .. tostring(math.random(1,3)) .. ".ogg")
 
 -- Sound played when humans all die.
-GM.AllLoseSound = Sound("zombiesurvival/music_lose.ogg")
+GM.AllLoseSound = Sound("zombiesurvival/custom/lose" .. tostring(math.random(1,11)) .. ".ogg")
 
 -- Sound played when humans survive.
-GM.HumanWinSound = Sound("zombiesurvival/music_win.ogg")
+GM.HumanWinSound = Sound("zombiesurvival/custom/win" .. tostring(math.random(1,19)) .. ".ogg")
 
 -- Sound played to a person when they die as a human.
-GM.DeathSound = Sound("zombiesurvival/human_death_stinger.ogg")
+GM.DeathSound = Sound("zombiesurvival/custom/death" .. tostring(math.random(1,16)) .. ".ogg")
 
 -- Fetch map profiles and node profiles from noxiousnet database?
 GM.UseOnlineProfiles = true
