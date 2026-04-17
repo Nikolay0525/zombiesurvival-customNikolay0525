@@ -10,7 +10,7 @@ CLASS.Boss = true
 CLASS.Health = math.Round(1500 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 170
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_frostshade"
 

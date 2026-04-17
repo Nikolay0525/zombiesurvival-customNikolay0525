@@ -14,7 +14,7 @@ CLASS.FearPerInstance = 1
 
 CLASS.CanTaunt = true
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_ticklemonster"
 

@@ -9,7 +9,7 @@ CLASS.KnockbackScale = 0
 
 CLASS.FearPerInstance = 0.05
 
-CLASS.Points = 20
+CLASS.Points = math.Round(20 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.Model = Model("models/dav0r/hoverball.mdl")
 

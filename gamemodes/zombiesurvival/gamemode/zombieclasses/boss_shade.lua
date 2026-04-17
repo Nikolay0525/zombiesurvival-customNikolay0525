@@ -21,7 +21,7 @@ CLASS.Speed = 170 --125
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_shade"
 

@@ -14,7 +14,7 @@ CLASS.Speed = 195
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 35
+CLASS.Points = math.Round(35 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_bonemesh"
 

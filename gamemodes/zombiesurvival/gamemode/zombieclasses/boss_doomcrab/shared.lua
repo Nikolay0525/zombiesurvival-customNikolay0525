@@ -9,7 +9,7 @@ CLASS.KnockbackScale = 0
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 35
+CLASS.Points = math.Round(35 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.Model = Model("models/headcrabclassic.mdl")
 
