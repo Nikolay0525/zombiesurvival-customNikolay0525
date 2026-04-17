@@ -4019,7 +4019,7 @@ function GM:PlayerSpawn(pl)
 		else
 			local lowundead = team.NumPlayers(TEAM_UNDEAD) < 4
 
-			local healthmulti = (self.ObjectiveMap or self.ZombieEscape) and 1 or lowundead and 1.5 or 1
+			local healthmulti = (self.ObjectiveMap or self.ZombieEscape) and 1 or (lowundead and GAMEMODE.OutnumberedHealthBonus == 1) and 1.5 or 1
 			pl:SetHealth(classtab.Health * healthmulti)
 		end
 
