@@ -124,6 +124,67 @@ local HITGROUP_LEFTLEG = HITGROUP_LEFTLEG
 local HITGROUP_RIGHTLEG = HITGROUP_RIGHTLEG
 local PTeam = FindMetaTable("Player").Team
 
+GM.WinMusicPlaylist = {}
+GM.LoseMusicPlaylist = {}
+GM.LastHumanMusicPlaylist = {}
+GM.DeathSoundsList = {}
+
+function GM:GetNextMusicTrack(playlistTable)
+    if not playlistTable or #playlistTable == 0 then return "" end
+    
+    local currentTrack = playlistTable[1]
+    table.remove(playlistTable, 1)
+    table.insert(playlistTable, currentTrack)
+    
+    return Sound(currentTrack)
+end
+
+function GM:GetRandomDeathSound()
+    if not self.DeathSoundsList or #self.DeathSoundsList == 0 then return "" end
+    return Sound(table.Random(self.DeathSoundsList))
+end
+
+if SERVER then
+    util.AddNetworkString("ZS_SyncCustomPlaylists")
+
+    local function LoadAndStoreSounds(baseSoundName, targetTable)
+        local i = 1
+        while file.Exists("sound/" .. baseSoundName .. i .. ".ogg", "GAME") do
+            local fullPath = baseSoundName .. i .. ".ogg"
+            resource.AddFile("sound/" .. fullPath)
+            table.insert(targetTable, fullPath)
+            i = i + 1
+        end
+    end
+
+    LoadAndStoreSounds("zombiesurvival/custom/win", GM.WinMusicPlaylist)
+    LoadAndStoreSounds("zombiesurvival/custom/lose", GM.LoseMusicPlaylist)
+    LoadAndStoreSounds("zombiesurvival/custom/lasthuman", GM.LastHumanMusicPlaylist)
+    LoadAndStoreSounds("zombiesurvival/custom/death", GM.DeathSoundsList)
+
+    table.Shuffle(GM.WinMusicPlaylist)
+    table.Shuffle(GM.LoseMusicPlaylist)
+    table.Shuffle(GM.LastHumanMusicPlaylist)
+
+    hook.Add("PlayerInitialSpawn", "SyncZSMusicPlaylists", function(ply)
+        net.Start("ZS_SyncCustomPlaylists")
+            net.WriteTable(GAMEMODE.WinMusicPlaylist)
+            net.WriteTable(GAMEMODE.LoseMusicPlaylist)
+            net.WriteTable(GAMEMODE.LastHumanMusicPlaylist)
+            net.WriteTable(GAMEMODE.DeathSoundsList)
+        net.Send(ply)
+    end)
+end
+
+if CLIENT then
+    net.Receive("ZS_SyncCustomPlaylists", function()
+        GAMEMODE.WinMusicPlaylist = net.ReadTable()
+        GAMEMODE.LoseMusicPlaylist = net.ReadTable()
+        GAMEMODE.LastHumanMusicPlaylist = net.ReadTable()
+        GAMEMODE.DeathSoundsList = net.ReadTable()
+    end)
+end
+
 function GM:AddCustomAmmo()
 	game.AddAmmoType({name = "dummy"})
 	game.AddAmmoType({name = "pulse"})

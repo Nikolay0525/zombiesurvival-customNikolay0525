@@ -398,13 +398,31 @@ function GM:AddResources()
 
 	resource.AddFile("materials/zombiesurvival/arsenalcrate.png")
 
-	resource.AddFile("sound/"..tostring(self.LastHumanSound))
-	resource.AddFile("sound/"..tostring(self.AllLoseSound))
-	resource.AddFile("sound/"..tostring(self.HumanWinSound))
-	resource.AddFile("sound/"..tostring(self.DeathSound))
+	-- local function LoadAndStoreSounds(baseSoundName, targetTable)
+	-- 	local i = 1
+	-- 	while file.Exists("sound/" .. baseSoundName .. i .. ".ogg", "GAME") do
+	-- 		local fullPath = baseSoundName .. i .. ".ogg"
+			
+	-- 		resource.AddFile("sound/" .. fullPath)
+			
+	-- 		table.insert(targetTable, fullPath)
+			
+	-- 		i = i + 1
+	-- 	end
+	-- end
+
+	-- LoadAndStoreSounds("zombiesurvival/custom/win", self.WinMusicPlaylist)
+	-- LoadAndStoreSounds("zombiesurvival/custom/lose", self.LoseMusicPlaylist)
+	-- LoadAndStoreSounds("zombiesurvival/custom/lasthuman", self.LastHumanMusicPlaylist)
+	-- LoadAndStoreSounds("zombiesurvival/custom/death", self.DeathSoundsList)
+
+	-- table.Shuffle(self.WinMusicPlaylist)
+	-- table.Shuffle(self.LoseMusicPlaylist)
+	-- table.Shuffle(self.LastHumanMusicPlaylist)
 end
 
 function GM:Initialize()
+
 	self:FixSkillConnections()
 	self:RegisterPlayerSpawnEntities()
 	self:AddResources()

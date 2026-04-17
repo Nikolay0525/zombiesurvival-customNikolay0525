@@ -787,3 +787,4 @@ GM.EndWavePointsBonus = 5
 
 -- Also give humans this many points when the wave ends, multiplied by (wave - 1)
 GM.EndWavePointsBonusPerWave = 1
+

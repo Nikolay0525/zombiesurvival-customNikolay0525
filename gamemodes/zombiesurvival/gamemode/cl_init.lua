@@ -777,14 +777,31 @@ end
 local cv_ShouldPlayMusic = CreateClientConVar("zs_playmusic", 1, true, false)
 local NextBeat = 0
 local LastBeatLevel = 0
+local lastHumanMusic = nil
 function GM:PlayBeats(teamid, fear)
+	if not lastHumanMusic then
+        lastHumanMusic = GAMEMODE:GetNextMusicTrack(GAMEMODE.LastHumanMusicPlaylist)
+    end
 	if RealTime() <= NextBeat or not gamemode.Call("ShouldPlayBeats", teamid, fear) then return end
 
 	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
-		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + SoundDuration(self.LastHumanSound) - 0.025
-		return
+        if not lastHumanMusic or lastHumanMusic == "" then return end 
+
+        MySelf:EmitSound(lastHumanMusic, 0, 100, self.BeatsVolume)
+        
+        local duration = SoundDuration(lastHumanMusic)
+        
+        if duration <= 0 then 
+			print("Duration of track"..duration)
+            duration = 180 
+        end
+
+        NextBeat = RealTime() + duration - 0.025
+        
+        lastHumanMusic = nil 
+        
+        return
 	end
 
 	if fear <= 0 or not self.BeatsEnabled then return end
@@ -2089,7 +2106,7 @@ function GM:EndRound(winner, nextmap)
 		hook.Add("ShouldDrawLocalPlayer", "EndRoundShouldDrawLocalPlayer", EndRoundShouldDrawLocalPlayer)
 	end
 
-	local dvar = winner == TEAM_UNDEAD and self.AllLoseSound or self.HumanWinSound
+	local dvar = winner == TEAM_UNDEAD and GAMEMODE:GetNextMusicTrack(GAMEMODE.LoseMusicPlaylist) or GAMEMODE:GetNextMusicTrack(GAMEMODE.WinMusicPlaylist)
 	local snd = GetGlobalString(winner == TEAM_UNDEAD and "losemusic" or "winmusic", dvar)
 	if snd == "default" then
 		snd = dvar
@@ -2114,7 +2131,7 @@ end
 function GM:LocalPlayerDied(attackername)
 	LASTDEATH = RealTime()
 
-	surface_PlaySound(self.DeathSound)
+	surface_PlaySound(GAMEMODE:GetRandomDeathSound())
 	if attackername then
 		self:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Get("you_have_died"))
 		self:CenterNotify(COLOR_RED, translate.Format(self.PantsMode and "you_were_kicked_by_x" or "you_were_killed_by_x", tostring(attackername)))
