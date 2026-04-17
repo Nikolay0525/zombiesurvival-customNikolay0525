@@ -51,19 +51,28 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 
 	-- Massive damage to drones and manhacks.
 	if eHitEntity and eHitEntity:IsValid() then
-		eHitEntity:TakeDamage(eHitEntity.BeingControlled and 200 or 25, owner, self)
+
+		local ctrlDroneDamage = math.Round( 200 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+		local droneDamage = math.Round( 25 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+
+		eHitEntity:TakeDamage(eHitEntity.BeingControlled and ctrlDroneDamage or droneDamage, owner, self)
 
 		if eHitEntity.FizzleStatusAOE then return end
 	end
 
 	for _, ent in pairs(util.BlastAlloc(self, owner, vHitPos, 128)) do
 		if ent:IsValidLivingPlayer() and gamemode.Call("PlayerShouldTakeDamage", ent, owner) and ent ~= owner then
-			ent:GiveStatus("sickness", 10)
-			local gt = ent:GiveStatus("enfeeble", 5)
+			local sickness = math.Round( 10 * (GAMEMODE.ZombieProjEffectsDamageMul or 1))
+			ent:GiveStatus("sickness", sickness)
+			
+			local enfeeble = math.Round( 5 * (GAMEMODE.ZombieProjEffectsDamageMul or 1))
+			local gt = ent:GiveStatus("enfeeble", enfeeble)
 			if gt and gt:IsValid() then
 				gt.Applier = owner
 			end
-			ent:GiveStatus("frightened", 3)
+
+			local frightened = math.Round( 3 * (GAMEMODE.ZombieProjEffectsDamageMul or 1))
+			ent:GiveStatus("frightened", frightened)
 		end
 	end
 end

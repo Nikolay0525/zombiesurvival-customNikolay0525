@@ -41,12 +41,17 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 	vHitNormal = vHitNormal or Vector(0, 0, 1)
 
 	if eHitEntity:IsValid() then
-		eHitEntity:PoisonDamage(9, owner, self)
+		local poisonDamage = math.Round( 9 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+		eHitEntity:PoisonDamage(poisonDamage, owner, self)
+
 		if eHitEntity:IsPlayer() and eHitEntity:Team() ~= TEAM_UNDEAD then
 			local attach = eHitEntity:GetAttachment(1)
 			if attach and vHitPos:DistToSqr(attach.Pos) <= 324 then --18^2
 				eHitEntity:PlayEyePainSound()
-				local status = eHitEntity:GiveStatus("dimvision", 5)
+
+				local dimvision = math.Round( 5 * (GAMEMODE.ZombieProjEffectsDamageMul or 1))
+
+				local status = eHitEntity:GiveStatus("dimvision", dimvision)
 				if status then
 					status.EyeEffect = true
 				end

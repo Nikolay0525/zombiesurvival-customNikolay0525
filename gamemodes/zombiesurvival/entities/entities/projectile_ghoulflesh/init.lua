@@ -32,8 +32,11 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 	vHitNormal = vHitNormal or Vector(0, 0, 1)
 
 	if eHitEntity:IsValidLivingPlayer() and gamemode.Call("PlayerShouldTakeDamage", eHitEntity, owner) then
-		eHitEntity:GiveStatus("slow", 5)
-		eHitEntity:AddLegDamage(2)
+		local slow = math.Round( 5 * (GAMEMODE.ZombieProjEffectsMul or 1))
+		eHitEntity:GiveStatus("slow", slow)
+
+		local legDamage = math.Round( 2 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+		eHitEntity:AddLegDamage(legDamage)
 	end
 
 	local effectdata = EffectData()

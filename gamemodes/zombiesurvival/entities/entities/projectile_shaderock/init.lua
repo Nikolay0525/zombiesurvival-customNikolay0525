@@ -37,7 +37,8 @@ function ENT:Hit(vHitPos, vHitNormal, ent)
 
 	if ent:IsValid() then
 		if not ent:IsPlayer() or (ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD) then
-			ent:TakeSpecialDamage(66 * (ent.PhysicsDamageTakenMul or 1), DMG_GENERIC, owner, self)
+			local specialDamage = math.Round( 66 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+			ent:TakeSpecialDamage(specialDamage * (ent.PhysicsDamageTakenMul or 1), DMG_GENERIC, owner, self)
 		end
 	end
 

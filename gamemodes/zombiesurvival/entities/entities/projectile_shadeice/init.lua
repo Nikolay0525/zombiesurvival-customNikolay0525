@@ -44,7 +44,9 @@ function ENT:Hit(vHitPos, vHitNormal, hitent)
 	util.Effect("hit_ice", effectdata)
 
 	if hitent:IsValid() and not hitent:IsPlayer() or (hitent:IsPlayer() and hitent:Team() ~= TEAM_UNDEAD) then
-		hitent:TakeSpecialDamage(44 * (hitent.PhysicsDamageTakenMul or 1), DMG_GENERIC, owner, self)
+		
+		local specialDamage = math.Round( 44 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+		hitent:TakeSpecialDamage(specialDamage * (hitent.PhysicsDamageTakenMul or 1), DMG_GENERIC, owner, self)
 
 		if hitent.FizzleStatusAOE then return end
 	end
@@ -54,8 +56,11 @@ function ENT:Hit(vHitPos, vHitNormal, hitent)
 			local nearest = ent:NearestPoint(vHitPos)
 			local scalar = ((110 - nearest:Distance(vHitPos)) / 110)
 
-			ent:GiveStatus("frost", scalar * 6)
-			ent:AddLegDamageExt(18 * scalar, owner, self, SLOWTYPE_COLD)
+			local frost = math.Round( 6 * (GAMEMODE.ZombieProjEffectsMul or 1))
+			ent:GiveStatus("frost", scalar * frost)
+
+			local legDamage = math.Round( 18 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+			ent:AddLegDamageExt(legDamage * scalar, owner, self, SLOWTYPE_COLD)
 		end
 	end
 end

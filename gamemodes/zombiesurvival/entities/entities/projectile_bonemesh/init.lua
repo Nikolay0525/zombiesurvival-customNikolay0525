@@ -40,7 +40,7 @@ function ENT:Explode(hitpos, hitnormal, hitent)
 		effectdata:SetOrigin(hitpos)
 	util.Effect("explosion_bonemesh", effectdata)
 
-	util.Blood(hitpos, 30, hitnormal, 300, true)
+	util.Blood(hitpos, 30, hitnormal, 300, true) -- what?
 
 	for i = 1, 4 do
 		for _, pl in pairs(ents.FindInSphere(hitpos, 90)) do
