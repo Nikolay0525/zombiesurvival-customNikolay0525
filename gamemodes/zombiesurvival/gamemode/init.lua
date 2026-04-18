@@ -1570,6 +1570,8 @@ end
 
 function GM:LastHuman(pl)
 	if not LASTHUMAN then
+		self:UpdateLastHumanTrack()
+		
 		net.Start("zs_lasthuman")
 			net.WriteEntity(pl or NULL)
 		net.Broadcast()
@@ -1856,6 +1858,8 @@ function GM:DoRestartGame()
 end
 
 function GM:RestartGame()
+	timer.Remove("ZS_LastHumanMusicLoop")
+	
 	for _, pl in pairs(player.GetAll()) do
 		pl:StripWeapons()
 		pl:StripAmmo()
@@ -1882,7 +1886,7 @@ function GM:RestartGame()
 	end
 	self:SetWaveEnd(self:GetWaveStart() + self:GetWaveOneLength())
 	self:SetWaveActive(false)
-
+	
 	SetGlobalInt("numwaves", -2)
 	if GetGlobalString("hudoverride"..TEAM_UNDEAD, "") ~= "" then
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
@@ -2001,6 +2005,8 @@ function GM:EndRound(winner)
 	timer.Simple(5, function() gamemode.Call("DoHonorableMentions") end)
 
 	if winner == TEAM_HUMAN then
+		GAMEMODE:BroadcastEndRoundMusic(true)
+		
 		self.LastHumanPosition = nil
 
 		for _, pl in pairs(player.GetAll()) do
@@ -2015,6 +2021,9 @@ function GM:EndRound(winner)
 
 		hook.Add("PlayerShouldTakeDamage", "EndRoundShouldTakeDamage", EndRoundPlayerShouldTakeDamage)
 	elseif winner == TEAM_UNDEAD then
+
+		GAMEMODE:BroadcastEndRoundMusic(false)
+
 		hook.Add("PlayerShouldTakeDamage", "EndRoundShouldTakeDamage", EndRoundPlayerCanSuicide)
 
 		for _, pl in pairs(team.GetPlayers(TEAM_UNDEAD)) do

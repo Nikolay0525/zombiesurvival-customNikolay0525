@@ -124,28 +124,27 @@ local HITGROUP_LEFTLEG = HITGROUP_LEFTLEG
 local HITGROUP_RIGHTLEG = HITGROUP_RIGHTLEG
 local PTeam = FindMetaTable("Player").Team
 
-GM.WinMusicPlaylist = {}
-GM.LoseMusicPlaylist = {}
-GM.LastHumanMusicPlaylist = {}
-GM.DeathSoundsList = {}
-
-function GM:GetNextMusicTrack(playlistTable)
-    if not playlistTable or #playlistTable == 0 then return "" end
-    
-    local currentTrack = playlistTable[1]
-    table.remove(playlistTable, 1)
-    table.insert(playlistTable, currentTrack)
-    
-    return Sound(currentTrack)
-end
-
 function GM:GetRandomDeathSound()
-    if not self.DeathSoundsList or #self.DeathSoundsList == 0 then return "" end
-    return Sound(table.Random(self.DeathSoundsList))
+    local count = GetGlobalInt("ZS_DeathSoundCount", 0)
+    
+    if count == 0 then return "" end
+    
+    local randomIndex = math.random(1, count)
+    return Sound("zombiesurvival/custom/death" .. randomIndex .. ".ogg")
 end
 
 if SERVER then
-    util.AddNetworkString("ZS_SyncCustomPlaylists")
+	util.AddNetworkString("ZS_ClientFullyLoaded")
+	util.AddNetworkString("ZS_PlayWelcomeSound")
+    util.AddNetworkString("ZS_PlayServerMusic")
+	util.AddNetworkString("ZS_PlayEndMusic")
+	util.AddNetworkString("ZS_UpdateLHTrack")
+
+    GM.WinMusicPlaylist = {}
+    GM.LoseMusicPlaylist = {}
+    GM.LastHumanMusicPlaylist = {}
+    GM.DeathSoundsList = {}
+	GM.RulesSoundsList = {}
 
     local function LoadAndStoreSounds(baseSoundName, targetTable)
         local i = 1
@@ -155,34 +154,72 @@ if SERVER then
             table.insert(targetTable, fullPath)
             i = i + 1
         end
+        return i - 1 
     end
 
     LoadAndStoreSounds("zombiesurvival/custom/win", GM.WinMusicPlaylist)
     LoadAndStoreSounds("zombiesurvival/custom/lose", GM.LoseMusicPlaylist)
     LoadAndStoreSounds("zombiesurvival/custom/lasthuman", GM.LastHumanMusicPlaylist)
-    LoadAndStoreSounds("zombiesurvival/custom/death", GM.DeathSoundsList)
+    
+    local deathSoundsCount = LoadAndStoreSounds("zombiesurvival/custom/death", GM.DeathSoundsList)
+    SetGlobalInt("ZS_DeathSoundCount", deathSoundsCount)
+
+	local rulesSoundsCount = LoadAndStoreSounds("zombiesurvival/custom/server_rules", GM.RulesSoundsList)
 
     table.Shuffle(GM.WinMusicPlaylist)
     table.Shuffle(GM.LoseMusicPlaylist)
     table.Shuffle(GM.LastHumanMusicPlaylist)
 
-    hook.Add("PlayerInitialSpawn", "SyncZSMusicPlaylists", function(ply)
-        net.Start("ZS_SyncCustomPlaylists")
-            net.WriteTable(GAMEMODE.WinMusicPlaylist)
-            net.WriteTable(GAMEMODE.LoseMusicPlaylist)
-            net.WriteTable(GAMEMODE.LastHumanMusicPlaylist)
-            net.WriteTable(GAMEMODE.DeathSoundsList)
-        net.Send(ply)
-    end)
-end
+    function GM:GetNextMusicTrack(playlistTable)
+        if not playlistTable or #playlistTable == 0 then return "" end
+        local currentTrack = playlistTable[1]
+        table.remove(playlistTable, 1)
+        table.insert(playlistTable, currentTrack)
+        return Sound(currentTrack)
+    end
 
-if CLIENT then
-    net.Receive("ZS_SyncCustomPlaylists", function()
-        GAMEMODE.WinMusicPlaylist = net.ReadTable()
-        GAMEMODE.LoseMusicPlaylist = net.ReadTable()
-        GAMEMODE.LastHumanMusicPlaylist = net.ReadTable()
-        GAMEMODE.DeathSoundsList = net.ReadTable()
-    end)
+    function GM:UpdateLastHumanTrack()
+        if self.RoundEnded then return end
+
+        local track = self:GetNextMusicTrack(self.LastHumanMusicPlaylist)
+        
+        net.Start("ZS_UpdateLHTrack")
+            net.WriteString(track)
+        net.Broadcast()
+
+        --print("[ZS Дебаг] Розіслали трек Останньої Людини всім: " .. track)
+
+        local duration = SoundDuration(track)
+        if not duration or duration <= 0 then duration = 180 end
+
+        -- Запускаємо таймер для наступного треку
+        timer.Create("ZS_LastHumanMusicLoop", duration, 1, function()
+            if GAMEMODE then GAMEMODE:UpdateLastHumanTrack() end
+        end)
+    end
+
+    function GM:BroadcastEndRoundMusic(isWin)
+		timer.Remove("ZS_LastHumanMusicLoop")
+
+        local track = self:GetNextMusicTrack(isWin and self.WinMusicPlaylist or self.LoseMusicPlaylist)
+        
+        net.Start("ZS_PlayEndMusic")
+            net.WriteString(track)
+        net.Broadcast()
+    end
+
+	net.Receive("ZS_ClientFullyLoaded", function(len, ply)
+		if not IsValid(ply) then return end
+		
+		if rulesSoundsCount > 0 then
+			local randomIdx = math.random(1, rulesSoundsCount)
+			local soundPath = "zombiesurvival/custom/server_rules" .. randomIdx .. ".ogg"
+
+			net.Start("ZS_PlayWelcomeSound")
+				net.WriteString(soundPath)
+			net.Send(ply)
+		end
+	end)
 end
 
 function GM:AddCustomAmmo()

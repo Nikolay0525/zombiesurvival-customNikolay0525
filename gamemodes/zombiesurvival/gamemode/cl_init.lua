@@ -72,8 +72,18 @@ hook.Add("InitPostEntity", "GetLocal", function()
 	GAMEMODE.HookGetLocal = GAMEMODE.HookGetLocal or function(g) end
 	gamemode.Call("HookGetLocal", MySelf)
 	RunConsoleCommand("initpostentity")
-
+	
 	MySelf:ApplySkills()
+
+	net.Start("ZS_ClientFullyLoaded")
+	net.SendToServer()
+end)
+
+net.Receive("ZS_PlayWelcomeSound", function()
+    local soundPath = net.ReadString()
+    if soundPath and soundPath ~= "" then
+        MySelf:EmitSound(soundPath, 0, 100, 1)
+    end
 end)
 
 -- Remove when model decal crash is fixed.
@@ -777,45 +787,48 @@ end
 local cv_ShouldPlayMusic = CreateClientConVar("zs_playmusic", 1, true, false)
 local NextBeat = 0
 local LastBeatLevel = 0
-local lastHumanMusic = nil
+local currentLHTrack = ""
+
+net.Receive("ZS_UpdateLHTrack", function()
+    currentLHTrack = net.ReadString()
+    --print("[ZS Дебаг] Клієнт отримав трек LH: " .. currentLHTrack)
+end)
+
 function GM:PlayBeats(teamid, fear)
-	if not lastHumanMusic then
-        lastHumanMusic = GAMEMODE:GetNextMusicTrack(GAMEMODE.LastHumanMusicPlaylist)
-    end
-	if RealTime() <= NextBeat or not gamemode.Call("ShouldPlayBeats", teamid, fear) then return end
+    if RealTime() <= NextBeat or not gamemode.Call("ShouldPlayBeats", teamid, fear) then return end
 
-	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
-	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
-        if not lastHumanMusic or lastHumanMusic == "" then return end 
+    if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
+        if self.RoundEnded then return end 
 
-        MySelf:EmitSound(lastHumanMusic, 0, 100, self.BeatsVolume)
+        if currentLHTrack == "" then return end 
+
+        MySelf:EmitSound(currentLHTrack, 0, 100, self.BeatsVolume)
         
-        local duration = SoundDuration(lastHumanMusic)
+        local duration = SoundDuration(currentLHTrack)
         
         if duration <= 0 then 
-			print("Duration of track"..duration)
             duration = 180 
         end
 
         NextBeat = RealTime() + duration - 0.025
         
-        lastHumanMusic = nil 
+        currentLHTrack = "" 
         
         return
-	end
+    end
 
-	if fear <= 0 or not self.BeatsEnabled then return end
+    if fear <= 0 or not self.BeatsEnabled then return end
 
-	local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
-	if not beats then return end
+    local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
+    if not beats then return end
 
-	LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
+    LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 30), 3)
 
-	local snd = beats[LastBeatLevel]
-	if snd then
-		MySelf:EmitSound(snd, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + (self.SoundDuration[snd] or SoundDuration(snd)) - 0.025
-	end
+    local snd = beats[LastBeatLevel]
+    if snd then
+        MySelf:EmitSound(snd, 0, 100, self.BeatsVolume)
+        NextBeat = RealTime() + (self.SoundDuration[snd] or SoundDuration(snd)) - 0.025
+    end
 end
 
 local colPackUp = Color(20, 255, 20, 220)
@@ -2089,40 +2102,38 @@ local function EndRoundShouldDrawLocalPlayer(pl)
 end
 
 function GM:EndRound(winner, nextmap)
-	if self.RoundEnded then return end
-	self.RoundEnded = true
+    if self.RoundEnded then return end
+    self.RoundEnded = true
 
-	ROUNDWINNER = winner
+    ROUNDWINNER = winner
+    self.EndTime = CurTime()
 
-	self.EndTime = CurTime()
+    -- Це зупинить трек Останньої Людини, якщо він грав
+    RunConsoleCommand("stopsound") 
 
-	RunConsoleCommand("stopsound")
+    self.HUDPaint = self.HUDPaintEndRound
+    self.HUDPaintBackground = self.HUDPaintBackgroundEndRound
 
-	self.HUDPaint = self.HUDPaintEndRound
-	self.HUDPaintBackground = self.HUDPaintBackgroundEndRound
+    if winner == TEAM_UNDEAD and GetGlobalBool("endcamera", true) then
+        hook.Add("CalcView", "EndRoundCalcView", EndRoundCalcView)
+        hook.Add("ShouldDrawLocalPlayer", "EndRoundShouldDrawLocalPlayer", EndRoundShouldDrawLocalPlayer)
+    end
 
-	if winner == TEAM_UNDEAD and GetGlobalBool("endcamera", true) then
-		hook.Add("CalcView", "EndRoundCalcView", EndRoundCalcView)
-		hook.Add("ShouldDrawLocalPlayer", "EndRoundShouldDrawLocalPlayer", EndRoundShouldDrawLocalPlayer)
-	end
-
-	local dvar = winner == TEAM_UNDEAD and GAMEMODE:GetNextMusicTrack(GAMEMODE.LoseMusicPlaylist) or GAMEMODE:GetNextMusicTrack(GAMEMODE.WinMusicPlaylist)
-	local snd = GetGlobalString(winner == TEAM_UNDEAD and "losemusic" or "winmusic", dvar)
-	if snd == "default" then
-		snd = dvar
-	elseif snd == "none" then
-		snd = nil
-	end
-	if snd then
-		timer.Simple(0.5, function() surface_PlaySound(snd) end)
-	end
-
-	timer.Simple(5, function()
-		if not (pEndBoard and pEndBoard:IsValid()) then
-			MakepEndBoard(winner)
-		end
-	end)
+    timer.Simple(5, function()
+        if not (pEndBoard and pEndBoard:IsValid()) then
+            MakepEndBoard(winner)
+        end
+    end)
 end
+
+net.Receive("ZS_PlayEndMusic", function()
+    local trackToPlay = net.ReadString()
+    if trackToPlay and trackToPlay ~= "" then
+        timer.Simple(0.5, function() 
+            surface.PlaySound(trackToPlay) 
+        end)
+    end
+end)
 
 function GM:WeaponDeployed(pl, wep)
 	self:DoChangeDeploySpeed(wep)
