@@ -74,7 +74,7 @@ function SWEP:SecondaryAttack()
 
 		for _, ent in pairs(ents.FindInSphere(center, 150)) do
 			if ent:IsValidLivingHuman() and WorldVisible(ent:WorldSpaceCenter(), center) then
-				ent:GiveStatus("frightened", 10)
+				ent:GiveStatus("frightened", math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 			end
 		end
 	end

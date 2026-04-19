@@ -54,8 +54,8 @@ function SWEP:Think()
 						hit = true
 						self:MeleeHit(ent, trace, damage * (ent:IsPlayer() and self.PounceDamageVsPlayerMul or ent.PounceWeakness or 1), ent:IsPlayer() and 1 or 10)
 						if ent:IsPlayer() then
-							ent:GiveStatus("slow", 5)
-							ent:AddLegDamage(24)
+							ent:GiveStatus("slow", math.Round(5 * (GAMEMODE.ZombieHitEffectsMul or 1)))
+							ent:AddLegDamage(math.Round(24 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 						end
 					end
 				end

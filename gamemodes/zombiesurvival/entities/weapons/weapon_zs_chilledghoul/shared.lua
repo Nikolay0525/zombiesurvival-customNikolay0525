@@ -10,13 +10,13 @@ SWEP.SlowDownScale = 0.1
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
 	if SERVER and ent:IsPlayer() then
-		local gt = ent:GiveStatus("frost", 8)
+		local gt = ent:GiveStatus("frost", math.Round(8 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 		local owner = self:GetOwner()
 
 		if gt and gt:IsValid() then
 			gt.Applier = owner
 		end
-		ent:AddLegDamageExt(12, owner, self, SLOWTYPE_COLD)
+		ent:AddLegDamageExt(math.Round(12 * (GAMEMODE.ZombieHitEffectsMul or 1)), owner, self, SLOWTYPE_COLD)
 	end
 
 	self.BaseClass.ApplyMeleeDamage(self, ent, trace, damage)

@@ -78,14 +78,14 @@ function SWEP:Think()
 				if ent:IsPlayer() then
 					if SERVER then
 						self:EmitBiteSound()
-						ent:AddLegDamage(7.2)
+						ent:AddLegDamage(math.Round(7.2 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 					end
 
 					if owner:Health() < owner:GetMaxHealth() then
 						owner:SetHealth(math.min(owner:Health() + self.PounceDamage, owner:GetMaxHealth()))
 					end
 
-					ent:GiveStatus("sickness", 5)
+					ent:GiveStatus("sickness", math.Round(5 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 				elseif SERVER then
 					self:EmitBiteObjectSound()
 				end

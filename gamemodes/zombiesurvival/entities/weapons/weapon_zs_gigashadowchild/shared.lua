@@ -43,7 +43,7 @@ function SWEP:ApplyMeleeDamage(ent, trace, damage)
 		ent:SetVelocity(vel)
 
 		if SERVER then
-			ent:GiveStatus("dimvision", 10)
+			ent:GiveStatus("dimvision", math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 		end
 	end
 
@@ -96,7 +96,7 @@ function SWEP:CheckCry()
 					ent:KnockDown()
 					ent.NextKnockdown = CurTime() + 4
 					if SERVER then
-						ent:GiveStatus("dimvision", 10)
+						ent:GiveStatus("dimvision", math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 					end
 				end
 			end

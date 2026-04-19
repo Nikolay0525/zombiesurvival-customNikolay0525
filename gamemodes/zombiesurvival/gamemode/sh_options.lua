@@ -698,6 +698,11 @@ cvars.AddChangeCallback("zs_zombieoveralldamagemul", function(cvar, oldvalue, ne
     GAMEMODE.ZombieOverallDamageMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
 end) 
 
+GM.ZombieHitEffectsMul = math.Round(CreateConVar("zs_zombiehiteffectsmul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Scales the amount of effects that zombies deal when hit you with claws."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombiehiteffectsmul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieHitEffectsMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
 GM.ZombieMaxHealthMul = math.Round(CreateConVar("zs_zombiemaxhealthmul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Health will be mul on this value."):GetFloat(), 2)
 cvars.AddChangeCallback("zs_zombiemaxhealthmul", function(cvar, oldvalue, newvalue)
     GAMEMODE.ZombieMaxHealthMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
@@ -748,16 +753,16 @@ GM.SurvivalClips = 4 --2
 GM.ResupplyBoxCooldown = 60 
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
-GM.LastHumanSound = Sound("zombiesurvival/custom/lasthuman" .. tostring(math.random(1,3)) .. ".ogg")
+-- GM.LastHumanSound = Sound("zombiesurvival/custom/lasthuman" .. tostring(math.random(1,3)) .. ".ogg")
 
--- Sound played when humans all die.
-GM.AllLoseSound = Sound("zombiesurvival/custom/lose" .. tostring(math.random(1,11)) .. ".ogg")
+-- -- Sound played when humans all die.
+-- GM.AllLoseSound = Sound("zombiesurvival/custom/lose" .. tostring(math.random(1,11)) .. ".ogg")
 
--- Sound played when humans survive.
-GM.HumanWinSound = Sound("zombiesurvival/custom/win" .. tostring(math.random(1,19)) .. ".ogg")
+-- -- Sound played when humans survive.
+-- GM.HumanWinSound = Sound("zombiesurvival/custom/win" .. tostring(math.random(1,19)) .. ".ogg")
 
--- Sound played to a person when they die as a human.
-GM.DeathSound = Sound("zombiesurvival/custom/death" .. tostring(math.random(1,16)) .. ".ogg")
+-- -- Sound played to a person when they die as a human.
+-- GM.DeathSound = Sound("zombiesurvival/custom/death" .. tostring(math.random(1,16)) .. ".ogg")
 
 -- Fetch map profiles and node profiles from noxiousnet database?
 GM.UseOnlineProfiles = true

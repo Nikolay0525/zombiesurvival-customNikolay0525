@@ -38,7 +38,7 @@ function SWEP:ApplyMeleeDamage(ent, trace, damage)
 			gt.Applier = self:GetOwner()
 		end
 
-		ent:GiveStatus("dimvision", 10)
+		ent:GiveStatus("dimvision", math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 
 		local bleed = ent:GiveStatus("bleed")
 		if bleed and bleed:IsValid() then
