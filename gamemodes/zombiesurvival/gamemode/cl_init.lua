@@ -822,7 +822,7 @@ function GM:PlayBeats(teamid, fear)
     local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
     if not beats then return end
 
-    LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 30), 3)
+    LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 20), 3)
 
     local snd = beats[LastBeatLevel]
     if snd then
