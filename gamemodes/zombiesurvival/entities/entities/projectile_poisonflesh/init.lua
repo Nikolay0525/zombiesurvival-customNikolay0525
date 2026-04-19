@@ -1,6 +1,6 @@
 INC_SERVER()
 
-ENT.Damage = 4
+ENT.Damage = math.Round( 4 * (GAMEMODE.ZombieProjHitDamageMul or 1))
 
 function ENT:Initialize()
 	self.DeathTime = CurTime() + 30

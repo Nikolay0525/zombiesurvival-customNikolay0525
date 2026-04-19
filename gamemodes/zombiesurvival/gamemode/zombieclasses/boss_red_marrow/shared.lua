@@ -9,7 +9,7 @@ CLASS.KnockbackScale = 0
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.Model = Model("models/player/skeleton.mdl")
 
@@ -17,7 +17,7 @@ CLASS.VoicePitch = 0.65
 
 CLASS.SWEP = "weapon_zs_redmarrow"
 
-CLASS.Health = 1800
+CLASS.Health = math.Round(1800 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 165
 
 CLASS.Skeletal = true

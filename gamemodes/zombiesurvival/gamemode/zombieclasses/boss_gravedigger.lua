@@ -7,14 +7,14 @@ CLASS.Help = "controls_gravedigger"
 
 CLASS.Boss = true
 
-CLASS.Health = 1600
+CLASS.Health = math.Round(1600 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 200
 
 CLASS.CanTaunt = true
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_graveshovelz"
 

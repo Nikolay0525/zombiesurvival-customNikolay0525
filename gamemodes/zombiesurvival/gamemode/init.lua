@@ -398,13 +398,31 @@ function GM:AddResources()
 
 	resource.AddFile("materials/zombiesurvival/arsenalcrate.png")
 
-	resource.AddFile("sound/"..tostring(self.LastHumanSound))
-	resource.AddFile("sound/"..tostring(self.AllLoseSound))
-	resource.AddFile("sound/"..tostring(self.HumanWinSound))
-	resource.AddFile("sound/"..tostring(self.DeathSound))
+	-- local function LoadAndStoreSounds(baseSoundName, targetTable)
+	-- 	local i = 1
+	-- 	while file.Exists("sound/" .. baseSoundName .. i .. ".ogg", "GAME") do
+	-- 		local fullPath = baseSoundName .. i .. ".ogg"
+			
+	-- 		resource.AddFile("sound/" .. fullPath)
+			
+	-- 		table.insert(targetTable, fullPath)
+			
+	-- 		i = i + 1
+	-- 	end
+	-- end
+
+	-- LoadAndStoreSounds("zombiesurvival/custom/win", self.WinMusicPlaylist)
+	-- LoadAndStoreSounds("zombiesurvival/custom/lose", self.LoseMusicPlaylist)
+	-- LoadAndStoreSounds("zombiesurvival/custom/lasthuman", self.LastHumanMusicPlaylist)
+	-- LoadAndStoreSounds("zombiesurvival/custom/death", self.DeathSoundsList)
+
+	-- table.Shuffle(self.WinMusicPlaylist)
+	-- table.Shuffle(self.LoseMusicPlaylist)
+	-- table.Shuffle(self.LastHumanMusicPlaylist)
 end
 
 function GM:Initialize()
+
 	self:FixSkillConnections()
 	self:RegisterPlayerSpawnEntities()
 	self:AddResources()
@@ -1552,6 +1570,8 @@ end
 
 function GM:LastHuman(pl)
 	if not LASTHUMAN then
+		self:UpdateLastHumanTrack()
+		
 		net.Start("zs_lasthuman")
 			net.WriteEntity(pl or NULL)
 		net.Broadcast()
@@ -1838,6 +1858,8 @@ function GM:DoRestartGame()
 end
 
 function GM:RestartGame()
+	timer.Remove("ZS_LastHumanMusicLoop")
+	
 	for _, pl in pairs(player.GetAll()) do
 		pl:StripWeapons()
 		pl:StripAmmo()
@@ -1864,7 +1886,7 @@ function GM:RestartGame()
 	end
 	self:SetWaveEnd(self:GetWaveStart() + self:GetWaveOneLength())
 	self:SetWaveActive(false)
-
+	
 	SetGlobalInt("numwaves", -2)
 	if GetGlobalString("hudoverride"..TEAM_UNDEAD, "") ~= "" then
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
@@ -1983,6 +2005,8 @@ function GM:EndRound(winner)
 	timer.Simple(5, function() gamemode.Call("DoHonorableMentions") end)
 
 	if winner == TEAM_HUMAN then
+		GAMEMODE:BroadcastEndRoundMusic(true)
+		
 		self.LastHumanPosition = nil
 
 		for _, pl in pairs(player.GetAll()) do
@@ -1997,6 +2021,9 @@ function GM:EndRound(winner)
 
 		hook.Add("PlayerShouldTakeDamage", "EndRoundShouldTakeDamage", EndRoundPlayerShouldTakeDamage)
 	elseif winner == TEAM_UNDEAD then
+
+		GAMEMODE:BroadcastEndRoundMusic(false)
+
 		hook.Add("PlayerShouldTakeDamage", "EndRoundShouldTakeDamage", EndRoundPlayerCanSuicide)
 
 		for _, pl in pairs(team.GetPlayers(TEAM_UNDEAD)) do
@@ -4019,7 +4046,7 @@ function GM:PlayerSpawn(pl)
 		else
 			local lowundead = team.NumPlayers(TEAM_UNDEAD) < 4
 
-			local healthmulti = (self.ObjectiveMap or self.ZombieEscape) and 1 or lowundead and 1.5 or 1
+			local healthmulti = (self.ObjectiveMap or self.ZombieEscape) and 1 or (lowundead and GAMEMODE.OutnumberedHealthBonus == 1) and 1.5 or 1
 			pl:SetHealth(classtab.Health * healthmulti)
 		end
 

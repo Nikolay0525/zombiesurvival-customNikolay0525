@@ -10,7 +10,7 @@ CLASS.Unlocked = true
 
 CLASS.SWEP = "weapon_zs_headcrab"
 
-CLASS.Health = 70
+CLASS.Health = math.Round(70 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 175
 CLASS.JumpPower = 100
 

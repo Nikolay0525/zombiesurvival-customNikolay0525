@@ -9,7 +9,7 @@ CLASS.SWEP = "weapon_zs_frigidrevenant"
 
 CLASS.Wave = 4 / 6
 
-CLASS.Health = 300
+CLASS.Health = math.Round(300 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 180
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

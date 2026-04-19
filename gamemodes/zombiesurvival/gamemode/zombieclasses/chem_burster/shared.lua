@@ -5,7 +5,7 @@ CLASS.Help = "controls_chem_burster"
 
 CLASS.Wave = 6 / 6
 
-CLASS.Health = 125
+CLASS.Health = math.Round(125 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 170
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

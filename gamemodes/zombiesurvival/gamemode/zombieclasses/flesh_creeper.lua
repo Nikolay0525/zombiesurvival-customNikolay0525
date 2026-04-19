@@ -10,7 +10,7 @@ CLASS.NotRandomStart = true
 
 CLASS.IsHeadcrab = true
 
-CLASS.Health = 175
+CLASS.Health = math.Round(175 * (GM.ZombieMaxHealthMul or 1))
 CLASS.SWEP = "weapon_zs_fleshcreeper"
 CLASS.Model = Model("models/antlion.mdl")
 CLASS.Speed = 160

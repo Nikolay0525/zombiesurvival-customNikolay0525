@@ -8,7 +8,7 @@ CLASS.Unlocked = true
 
 CLASS.BetterVersion = "Noxious Ghoul"
 
-CLASS.Health = 210
+CLASS.Health = math.Round(210 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 175
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

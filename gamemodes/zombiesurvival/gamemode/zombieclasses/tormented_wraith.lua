@@ -5,7 +5,7 @@ CLASS.TranslationName = "class_tormented_wraith"
 CLASS.Description = "description_tormented_wraith"
 CLASS.Help = "controls_tormented_wraith"
 
-CLASS.Health = 150
+CLASS.Health = math.Round(150 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
 CLASS.Speed = 150
 

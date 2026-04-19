@@ -7,10 +7,10 @@ CLASS.Help = "controls_ancient_nightmare"
 
 CLASS.Boss = true
 
-CLASS.Health = 1825
+CLASS.Health = math.Round(1825 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 165
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_anightmare"
 

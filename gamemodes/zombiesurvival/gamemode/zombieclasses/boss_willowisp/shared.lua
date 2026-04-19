@@ -9,13 +9,13 @@ CLASS.KnockbackScale = 0
 
 CLASS.FearPerInstance = 0.05
 
-CLASS.Points = 20
+CLASS.Points = math.Round(20 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.Model = Model("models/dav0r/hoverball.mdl")
 
 CLASS.SWEP = "weapon_zs_special_wow"
 
-CLASS.Health = 1000
+CLASS.Health = math.Round(1000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 240
 CLASS.JumpPower = 0
 

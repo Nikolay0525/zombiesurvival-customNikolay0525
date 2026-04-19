@@ -43,25 +43,29 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 
 	if eHitEntity:IsValid() then
 		if eHitEntity:IsPlayer() then
-			eHitEntity:TakeDamage(3, owner, self)
+			local hitDamage = math.Round( 3 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+			eHitEntity:TakeDamage(hitDamage, owner, self)
 
 			local bleed = eHitEntity:GiveStatus("bleed")
 			if bleed and bleed:IsValid() then
-				bleed:AddDamage(8)
+				local bleedDamage = math.Round( 8 * (GAMEMODE.ZombieProjEffectsMul or 1))
+				bleed:AddDamage(bleedDamage)
 				bleed.Damager = self:GetOwner()
 			end
 			if eHitEntity:Team() == TEAM_HUMAN then
 				local attach = eHitEntity:GetAttachment(1)
 				if attach and vHitPos:DistToSqr(attach.Pos) <= 324 then
 					eHitEntity:PlayEyePainSound()
-					local status = eHitEntity:GiveStatus("dimvision", 5)
+					local dimVisionAmount = math.Round( 5 * (GAMEMODE.ZombieProjEffectsMul or 1))
+					local status = eHitEntity:GiveStatus("dimvision", dimVisionAmount)
 					if status then
 						status.EyeEffect = true
 					end
 				end
 			end
 		else
-			eHitEntity:TakeDamage(11, owner, self)
+			local hitDamage = math.Round( 11 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+			eHitEntity:TakeDamage(hitDamage, owner, self)
 		end
 	end
 end

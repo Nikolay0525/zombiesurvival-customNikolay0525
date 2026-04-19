@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 25
+SWEP.MeleeDamage = math.Round(25 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 function SWEP:Reload()
 	self.BaseClass.SecondaryAttack(self)

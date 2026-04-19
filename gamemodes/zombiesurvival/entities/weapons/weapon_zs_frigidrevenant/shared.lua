@@ -2,7 +2,7 @@ SWEP.Base = "weapon_zs_zombie"
 
 SWEP.PrintName = "Frigid Revenant"
 
-SWEP.MeleeDamage = 32
+SWEP.MeleeDamage = math.Round(32 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 local Spread = {
 	{0, 0},

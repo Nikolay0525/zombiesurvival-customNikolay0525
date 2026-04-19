@@ -9,7 +9,7 @@ SWEP.ViewModelFOV = 40
 
 SWEP.MeleeDelay = 0
 SWEP.MeleeReach = 16
-SWEP.MeleeDamage = 3
+SWEP.MeleeDamage = math.Round(3 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 0.025
 SWEP.MeleeSize = 1 --0.5
 SWEP.MeleeDamageType = DMG_SLASH

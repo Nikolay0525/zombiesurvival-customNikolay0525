@@ -53,13 +53,15 @@ function ENT:Hit(vHitPos, vHitNormal, ent)
 		if (ent.BeingControlled or ent:IsValidLivingHuman()) and owner:IsPlayer() then
 			if ent:IsValidLivingHuman() then
 				self.Exploded = true
-
-				ent:TakeSpecialDamage(8, DMG_GENERIC, owner, self)
+				local specialDamage = math.Round( 8 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+				ent:TakeSpecialDamage(specialDamage, DMG_GENERIC, owner, self)
 				ent:KnockDown()
 
 				local status = ent:GiveStatus("devourer")
 				if status and status:IsValid() then
-					status:SetDamage(ent:HasTrinket("analgestic") and 5 or 15)
+					local trinketDamage = math.Round( 5 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+					local notrinketDamage = math.Round( 15 * (GAMEMODE.ZombieProjHitDamageMul or 1))
+					status:SetDamage(ent:HasTrinket("analgestic") and trinketDamage or notrinketDamage)
 					status:SetPuller(owner)
 					self:SetParent(status)
 				end

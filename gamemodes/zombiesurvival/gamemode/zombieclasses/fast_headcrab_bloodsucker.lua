@@ -11,7 +11,7 @@ CLASS.Model = Model("models/headcrab.mdl")
 
 CLASS.SWEP = "weapon_zs_bloodsucker_headcrab"
 
-CLASS.Health = 50
+CLASS.Health = math.Round(50 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.Points = CLASS.Health/GM.HeadcrabZombiePointRatio
 

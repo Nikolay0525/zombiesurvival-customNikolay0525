@@ -4,7 +4,7 @@ SWEP.PrintName = "Flesh Creeper"
 
 SWEP.MeleeDelay = 0.5
 SWEP.MeleeReach = 52
-SWEP.MeleeDamage = 15
+SWEP.MeleeDamage = math.Round(15 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 1.25
 SWEP.MeleeSize = 4.5 --3
 SWEP.MeleeDamageType = DMG_SLASH

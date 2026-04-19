@@ -4,10 +4,10 @@ SWEP.PrintName = "Nightmare"
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 15
-SWEP.BleedDamage = 15
+SWEP.MeleeDamage = math.Round(15 * (GAMEMODE.ZombieOverallDamageMul or 1))
+SWEP.BleedDamage = math.Round(15 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.SlowDownScale = 5.4
-SWEP.MeleeDamageVsProps = 40
+SWEP.MeleeDamageVsProps = math.Round(40 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.EnfeebleDurationMul = 10 / SWEP.MeleeDamage
 
 function SWEP:Reload()

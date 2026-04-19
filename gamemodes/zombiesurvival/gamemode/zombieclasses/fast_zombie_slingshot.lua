@@ -9,7 +9,7 @@ CLASS.Help = "controls_fast_zombie_slingshot"
 
 CLASS.Revives = false
 
-CLASS.Health = 180
+CLASS.Health = math.Round(180 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 235
 CLASS.SWEP = "weapon_zs_fastzombie_slingshot"
 

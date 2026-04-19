@@ -7,7 +7,7 @@ CLASS.TranslationName = "class_shadow_gore_child"
 CLASS.Description = "description_shadow_gore_child"
 CLASS.Help = "controls_shadow_gore_child"
 
-CLASS.Health = 15
+CLASS.Health = math.Round(15 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 155
 
 CLASS.Points = 0.5

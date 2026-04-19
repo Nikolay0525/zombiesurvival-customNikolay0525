@@ -7,14 +7,14 @@ CLASS.Boss = true
 
 CLASS.KnockbackScale = 0
 
-CLASS.Health = 2000
+CLASS.Health = math.Round(2000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 280 -- 150
 
 CLASS.CanTaunt = true
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_nightmare"
 

@@ -9,13 +9,13 @@ CLASS.KnockbackScale = 0
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 35
+CLASS.Points = math.Round(35 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.Model = Model("models/headcrabclassic.mdl")
 
 CLASS.SWEP = "weapon_zs_doomcrab"
 
-CLASS.Health = 2200
+CLASS.Health = math.Round(2200 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 210
 --CLASS.JumpPower = 160
 

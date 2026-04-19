@@ -8,7 +8,7 @@ CLASS.BetterVersion = "Tormented Wraith"
 CLASS.Wave = 0
 CLASS.Unlocked = true
 
-CLASS.Health = 135
+CLASS.Health = math.Round(135 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_wraith"
 CLASS.Model = Model("models/player/zelpa/stalker.mdl")

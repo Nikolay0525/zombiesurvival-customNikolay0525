@@ -9,9 +9,9 @@ CLASS.Boss = true
 
 CLASS.SWEP = "weapon_zs_coolwisp"
 
-CLASS.Health = 900
+CLASS.Health = math.Round(900 * (GM.ZombieMaxHealthMul or 1))
 
-CLASS.Points = 20
+CLASS.Points = math.Round(20 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.ResistFrost = true
 

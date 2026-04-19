@@ -10,7 +10,7 @@ CLASS.BetterVersion = "Frigid Revenant"
 CLASS.Wave = 0
 CLASS.Unlocked = true
 
-CLASS.Health = 220
+CLASS.Health = math.Round(220 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 175
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

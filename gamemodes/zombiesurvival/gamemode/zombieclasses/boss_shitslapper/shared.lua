@@ -11,11 +11,11 @@ CLASS.KnockbackScale = 0
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 40
+CLASS.Points = math.Round(40 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_shitslapper"
 
-CLASS.Health = 4000
+CLASS.Health = math.Round(4000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 225
 CLASS.JumpPower = 200
 

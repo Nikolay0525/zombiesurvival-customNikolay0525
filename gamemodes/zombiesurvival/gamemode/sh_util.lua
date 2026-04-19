@@ -504,3 +504,4 @@ function util.CreatePulseImpactEffect(hitpos, hitnormal)
 	pulseeffect:SetNormal(hitnormal)
 	util.Effect("cball_bounce", pulseeffect)
 end
+

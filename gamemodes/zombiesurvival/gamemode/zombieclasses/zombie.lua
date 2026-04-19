@@ -10,13 +10,13 @@ CLASS.Unlocked = true
 CLASS.IsDefault = true
 CLASS.Order = 0
 
-CLASS.Health = 225
+CLASS.Health = math.Round(225 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 175
 CLASS.Revives = true
 
 CLASS.CanTaunt = true
 
-CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
+CLASS.Points = CLASS.Health / GM.HumanoidZombiePointRatio
 
 CLASS.SWEP = "weapon_zs_zombie"
 

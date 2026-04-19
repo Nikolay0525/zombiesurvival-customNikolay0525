@@ -7,14 +7,14 @@ CLASS.Boss = true
 
 CLASS.KnockbackScale = 0
 
-CLASS.Health = 1750
+CLASS.Health = math.Round(1750 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 150
 
 CLASS.FearPerInstance = 1
 
 CLASS.CanTaunt = true
 
-CLASS.Points = 30
+CLASS.Points = math.Round(30 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_ticklemonster"
 

@@ -3,7 +3,7 @@ SWEP.Base = "weapon_zs_zombietorso"
 SWEP.PrintName = "Shadow Lurker"
 
 SWEP.MeleeDelay = 0.25
-SWEP.MeleeDamage = 20
+SWEP.MeleeDamage = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 function SWEP:PlayHitSound()
 	self:EmitSound("NPC_FastZombie.AttackHit", nil, nil, nil, CHAN_AUTO)

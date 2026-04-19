@@ -7,7 +7,7 @@ CLASS.Help = "controls_poison_zombie"
 
 CLASS.Wave = 5 / 6
 
-CLASS.Health = 460
+CLASS.Health = math.Round(460 * (GM.ZombieMaxHealthMul or 1))
 CLASS.SWEP = "weapon_zs_wildpoisonzombie"
 
 CLASS.Points = CLASS.Health/GM.PoisonZombiePointRatio

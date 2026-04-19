@@ -5,7 +5,7 @@ SWEP.Base = "weapon_zs_zombietorso"
 SWEP.PrintName = "Skeletal Crawler"
 
 SWEP.MeleeDelay = 0.25
-SWEP.MeleeDamage = 20
+SWEP.MeleeDamage = math.Round(20 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 function SWEP:Reload()
 	self:SecondaryAttack()

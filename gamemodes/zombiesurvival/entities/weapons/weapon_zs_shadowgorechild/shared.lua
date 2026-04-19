@@ -2,7 +2,7 @@ SWEP.Base = "weapon_zs_gorechild"
 
 SWEP.PrintName = "Shadow Child"
 
-SWEP.MeleeDamage = 2
+SWEP.MeleeDamage = math.Round(2 * (GAMEMODE.ZombieOverallDamageMul or 1))
 
 function SWEP:MeleeHit(ent, trace, damage, forcescale)
 	if ent:IsPlayer() then

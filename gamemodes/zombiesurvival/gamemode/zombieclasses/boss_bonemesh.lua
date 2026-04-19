@@ -9,12 +9,12 @@ CLASS.KnockbackScale = 0
 
 CLASS.CanTaunt = true
 
-CLASS.Health = 2000
+CLASS.Health = math.Round(2000 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Speed = 195
 
 CLASS.FearPerInstance = 1
 
-CLASS.Points = 35
+CLASS.Points = math.Round(35 * (GM.ZombieMaxHealthMul or 1))
 
 CLASS.SWEP = "weapon_zs_bonemesh"
 

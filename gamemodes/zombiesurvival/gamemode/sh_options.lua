@@ -693,6 +693,31 @@ cvars.AddChangeCallback("zs_roundlimit", function(cvar, oldvalue, newvalue)
 	GAMEMODE.RoundLimit = tonumber(newvalue) or 3
 end)
 
+GM.ZombieOverallDamageMul = math.Round(CreateConVar("zs_zombieoveralldamagemul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Scales the amount of melee damage that zombies deal."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombieoveralldamagemul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieOverallDamageMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ZombieMaxHealthMul = math.Round(CreateConVar("zs_zombiemaxhealthmul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Health will be mul on this value."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombiemaxhealthmul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieMaxHealthMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ZombieProjHitDamageMul = math.Round(CreateConVar("zs_zombieprojhitdamagemul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Damage of projectiles like poison mess, will be mul on this value."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombieprojhitdamagemul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieProjHitDamageMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ZombieProjEffectsMul = math.Round(CreateConVar("zs_zombieprojeffectsmul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Amount of effect made by projectiles not related to damage will be mul on this."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_zombieprojeffectsmul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ZombieProjEffectsMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
+GM.ResupplyAmmoMul = math.Round(CreateConVar("zs_resupplyammomul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Amount of ammo you gain when take from resupply."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_resupplyammomul", function(cvar, oldvalue, newvalue)
+    GAMEMODE.ResupplyAmmoMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
+end) 
+
 -- Static values that don't need convars...
 
 -- Initial length for wave 1.
@@ -714,25 +739,25 @@ GM.WaveZeroLength = 150
 GM.WaveIntermissionLength = 60
 
 -- Time in seconds between end round and next map.
-GM.EndGameTime = 45
+GM.EndGameTime = 30
 
 -- How many clips of ammo guns from the Worth menu start with. Some guns such as shotguns and sniper rifles have multipliers on this.
 GM.SurvivalClips = 4 --2
 
 -- How long do humans have to wait before being able to get more ammo from a resupply box?
-GM.ResupplyBoxCooldown = 60
+GM.ResupplyBoxCooldown = 60 
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
-GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")
+GM.LastHumanSound = Sound("zombiesurvival/custom/lasthuman" .. tostring(math.random(1,3)) .. ".ogg")
 
 -- Sound played when humans all die.
-GM.AllLoseSound = Sound("zombiesurvival/music_lose.ogg")
+GM.AllLoseSound = Sound("zombiesurvival/custom/lose" .. tostring(math.random(1,11)) .. ".ogg")
 
 -- Sound played when humans survive.
-GM.HumanWinSound = Sound("zombiesurvival/music_win.ogg")
+GM.HumanWinSound = Sound("zombiesurvival/custom/win" .. tostring(math.random(1,19)) .. ".ogg")
 
 -- Sound played to a person when they die as a human.
-GM.DeathSound = Sound("zombiesurvival/human_death_stinger.ogg")
+GM.DeathSound = Sound("zombiesurvival/custom/death" .. tostring(math.random(1,16)) .. ".ogg")
 
 -- Fetch map profiles and node profiles from noxiousnet database?
 GM.UseOnlineProfiles = true
@@ -762,3 +787,4 @@ GM.EndWavePointsBonus = 5
 
 -- Also give humans this many points when the wave ends, multiplied by (wave - 1)
 GM.EndWavePointsBonusPerWave = 1
+

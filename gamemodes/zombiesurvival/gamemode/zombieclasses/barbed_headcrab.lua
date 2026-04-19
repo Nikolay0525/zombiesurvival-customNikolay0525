@@ -5,7 +5,7 @@ CLASS.TranslationName = "class_barbed_headcrab"
 CLASS.Description = "description_barbed_headcrab"
 CLASS.Help = "controls_barbed_headcrab"
 
-CLASS.Health = 100
+CLASS.Health = math.Round(100 * (GM.ZombieMaxHealthMul or 1))
 CLASS.Points = CLASS.Health/GM.HeadcrabZombiePointRatio
 CLASS.Speed = 160
 

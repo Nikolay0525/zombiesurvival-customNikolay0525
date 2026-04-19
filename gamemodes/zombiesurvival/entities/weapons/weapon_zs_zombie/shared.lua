@@ -9,7 +9,7 @@ SWEP.WorldModel = ""
 SWEP.MeleeDelay = 0.74
 SWEP.MeleeReach = 48
 SWEP.MeleeSize = 4.5 --1.5
-SWEP.MeleeDamage = 35
+SWEP.MeleeDamage = math.Round(35 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 1
 SWEP.MeleeDamageType = DMG_SLASH
 
