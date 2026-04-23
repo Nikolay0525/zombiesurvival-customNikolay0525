@@ -86,6 +86,38 @@ net.Receive("ZS_PlayWelcomeSound", function()
     end
 end)
 
+local countdownNum = -1
+local countdownScale = 1
+local juggName = "" -- ДОДАНО: Змінна для збереження ніка
+
+net.Receive("ZS_PlayGlobalSound", function()
+    local soundPath = net.ReadString()
+    local num = net.ReadInt(8)
+    local nick = net.ReadString() -- ДОДАНО: Читаємо нік від сервера
+    
+    if soundPath ~= "" then
+        surface.PlaySound(soundPath)
+    end
+    
+    countdownNum = num
+    juggName = nick or "Хтось" -- Зберігаємо нік
+    countdownScale = 2 
+end)
+
+hook.Add("HUDPaint", "JuggernautCountdownUI", function()
+    if countdownNum <= 0 then return end
+    
+    local w, h = ScrW(), ScrH()
+    countdownScale = math.Approach(countdownScale, 1, FrameTime() * 5)
+    
+    -- Використовуємо нік у тексті
+    local text = juggName .. " СТАНЕТ ДЖАГЕРНАУТОМ ЧЕРЕЗ: " .. countdownNum
+    surface.SetFont("ZS3D2DFont2Small") 
+    
+    draw.SimpleText(text, "ZS3D2DFont2Small", w/2 + 2, h/4 + 2, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(text, "ZS3D2DFont2Small", w/2, h/4, Color(255, 50, 50, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+end)
+
 -- Remove when model decal crash is fixed.
 --[[function util.Decal()
 end]]
