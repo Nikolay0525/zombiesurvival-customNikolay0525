@@ -14,7 +14,7 @@ function SWEP:ApplyMeleeDamage(ent, trace, damage)
 		local noknockdown = true
 		if CurTime() >= (ent.NextKnockdown or 0) then
 			noknockdown = false
-			ent.NextKnockdown = CurTime() + 4
+			ent.NextKnockdown = CurTime() + math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1))
 		end
 		ent:ThrowFromPositionSetZ(trace.StartPos, ent:IsPlayer() and 600 or 1600, nil, noknockdown)
 	end

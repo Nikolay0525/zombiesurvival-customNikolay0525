@@ -37,7 +37,7 @@ function SWEP:ApplyMeleeDamage(ent, trace, damage)
 
 		if CurTime() >= (ent.NextKnockdown or 0) then
 			ent:KnockDown()
-			ent.NextKnockdown = CurTime() + 4
+			ent.NextKnockdown = CurTime() + math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1))
 		end
 		ent:SetGroundEntity(NULL)
 		ent:SetVelocity(vel)
@@ -94,7 +94,7 @@ function SWEP:CheckCry()
 			if ent:IsValid() and ent:IsValidLivingHuman() and WorldVisible(ent:GetPos(), worldspace) then
 				if CurTime() >= (ent.NextKnockdown or 0) then
 					ent:KnockDown()
-					ent.NextKnockdown = CurTime() + 4
+					ent.NextKnockdown = CurTime() + math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1))
 					if SERVER then
 						ent:GiveStatus("dimvision", math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 					end
