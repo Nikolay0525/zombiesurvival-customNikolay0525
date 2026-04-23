@@ -23,7 +23,7 @@ SWEP.ChargeDelay = 2
 SWEP.ChargeRecovery = 0.75
 SWEP.ChargeTime = 2.5
 SWEP.ChargeAccel = 0.5
-SWEP.ChargeKnockdown = math.Round(1.75 * (GAMEMODE.ZombieHitEffectsMul or 1))
+SWEP.ChargeKnockdown = 1.75 * (GAMEMODE.ZombieHitEffectsMul or 1)
 
 SWEP.Secondary.Automatic = false
 
