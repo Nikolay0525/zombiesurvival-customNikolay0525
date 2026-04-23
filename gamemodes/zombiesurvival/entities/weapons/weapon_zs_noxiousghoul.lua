@@ -8,7 +8,7 @@ SWEP.MeleeDamage = math.Round(32 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeDamageVsProps = math.Round(24 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.MeleeForceScale = 0.5
 SWEP.SlowDownScale = 0.25
-SWEP.EnfeebleDurationMul = 10 / SWEP.MeleeDamage
+SWEP.EnfeebleDurationMul = math.Round((10 / SWEP.MeleeDamage) * (GAMEMODE.ZombieHitEffectsMul or 1))
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
 	ent:PoisonDamage(damage, self:GetOwner(), self, trace.HitPos)
