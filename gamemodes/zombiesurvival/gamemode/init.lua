@@ -4580,11 +4580,7 @@ end
 function GM:MakeJuggernaut(ply)
 	ply:DropAll()
 
-	-- Give insane stats
-	ply:SetMaxHealth(1000)
-	ply:SetHealth(1000)
-
-	ply:Give("weapon_zs_kongolaxe")
+	ply:Give("weapon_zs_frotchet")
 	-- Give weapons and ammo
 	ply:Give("weapon_zs_boomstick")
 	ply:GiveAmmo(10000, "buckshot")
@@ -4593,7 +4589,26 @@ function GM:MakeJuggernaut(ply)
 	ply:Give("weapon_zs_medicalkit")
 	ply:GiveAmmo(1000,"Battery")
 	
-	ply:Give("Automated Reloader")
+	-- Weapon handling & Speed
+	ply:AddInventoryItem("trinket_autoreload")      -- Auto-reloads unequipped weapons
+	ply:AddInventoryItem("trinket_analgestic")      -- +25% deploy speed, resists slows and knockdowns
+	ply:AddInventoryItem("trinket_ammovestiii")     -- +12% reload speed
+	ply:AddInventoryItem("trinket_olympianframe")   -- Removes heavy weapon movement penalty (crucial for minigun)
+	
+	-- Survivability & Resistances
+	ply:AddInventoryItem("trinket_eodvest")         -- -35% explosive dmg, -50% fire dmg
+	ply:AddInventoryItem("trinket_composite")       -- -16% melee dmg, -16% projectile dmg
+	ply:AddInventoryItem("trinket_forcedamp")       -- Immune to prop knockdowns, -33% physics dmg
+	
+	-- Melee & Close Combat (For the Hammer)
+	ply:AddInventoryItem("trinket_powergauntlet")     -- Charges melee damage up to +45%
+	ply:AddInventoryItem("trinket_momentumsupsysiii") -- -20% melee delay, +12% knockback
+	ply:AddInventoryItem("trinket_hemoadrenaliii")    -- Converts 4% melee damage to Blood Armor
+	ply:AddInventoryItem("trinket_curbstompers")      -- Stomp damage, instant headcrab kill
+
+	-- Give insane stats
+	ply:SetMaxHealth(1500)
+	ply:SetHealth(1500)
 
 	net.Start("ZS_PlayGlobalSound")
 		net.WriteString(table.Random(self.JuggernautSpawnSounds))
