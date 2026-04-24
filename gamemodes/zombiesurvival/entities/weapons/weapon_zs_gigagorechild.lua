@@ -43,8 +43,8 @@ function SWEP:ApplyMeleeDamage(ent, trace, damage)
 		vel.z = 200
 
 		if CurTime() >= (ent.NextKnockdown or 0) then
-			ent:KnockDown()
-			ent.NextKnockdown = CurTime() + math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1))
+			ent:KnockDown(nil, true)
+			ent.NextKnockdown = CurTime() + 4
 		end
 		ent:SetGroundEntity(NULL)
 		ent:SetVelocity(vel)
@@ -143,8 +143,8 @@ function SWEP:CheckCry()
 		for k, ent in pairs(ents.FindInSphere(worldspace, 150)) do
 			if ent:IsValid() and ent:IsValidLivingHuman() and WorldVisible(ent:GetPos(), worldspace) then
 				if CurTime() >= (ent.NextKnockdown or 0) then
-					ent:KnockDown()
-					ent.NextKnockdown = CurTime() + math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1))
+					ent:KnockDown(nil, true)
+					ent.NextKnockdown = CurTime() + 4
 				end
 			end
 		end

@@ -55,7 +55,7 @@ function ENT:Hit(vHitPos, vHitNormal, ent)
 				self.Exploded = true
 				local specialDamage = math.Round( 8 * (GAMEMODE.ZombieProjHitDamageMul or 1))
 				ent:TakeSpecialDamage(specialDamage, DMG_GENERIC, owner, self)
-				ent:KnockDown()
+				ent:KnockDown(nil, true)
 
 				local status = ent:GiveStatus("devourer")
 				if status and status:IsValid() then

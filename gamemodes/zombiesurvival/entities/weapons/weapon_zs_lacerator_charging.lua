@@ -69,7 +69,7 @@ function SWEP:Think()
 							ent:ThrowFromPositionSetZ(trace.StartPos, 120 * chargemul + owner:GetVelocity():Length() * 0.5)
 							if CurTime() >= (ent.NextKnockdown or 0) and self:IsChargeCritical() then
 								ent:GiveStatus("knockdown", self.ChargeKnockdown * chargemul)
-								ent.NextKnockdown = CurTime() + math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1)) * chargemul
+								ent.NextKnockdown = CurTime() + 4 * chargemul
 							end
 						end
 					end

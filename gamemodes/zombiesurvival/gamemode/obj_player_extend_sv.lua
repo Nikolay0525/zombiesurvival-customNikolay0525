@@ -104,7 +104,7 @@ function meta:ProcessDamage(dmginfo)
 			damage = damage * self.PhysicsDamageTakenMul
 		end
 		if damage >= 30 and not forcedamp and not noadj and inflictor ~= attacker then
-			self:KnockDown(damage * 0.05)
+			self:KnockDown(damage * 0.05) -- ??? Zombie hitting or what?
 		end
 
 		dmginfo:SetDamage(damage)
@@ -366,7 +366,7 @@ function meta:KnockDown(time, isZombieHitting)
 	isZombieHitting = isZombieHitting or false
 	if P_Team(self) == TEAM_HUMAN then
 		if isZombieHitting then
-			self:GiveStatus("knockdown", math.Round((time or 3) * (GAMEMODE.ZombieKnockdownMul or 1)))
+			self:GiveStatus("knockdown", math.Round((time or 3) * (GAMEMODE.ZombieKnockDownMul or 1)))
 		else
 			self:GiveStatus("knockdown", time or 3)
 		end
