@@ -4559,6 +4559,7 @@ function GM:StartJuggernautEvent(ply)
 	timer.Create("ZS_JuggernautCountdown", 1, 11, function()
 		if not IsValid(ply) or not ply:Alive() then
 			timer.Remove("ZS_JuggernautCountdown")
+			
 			return
 		end
 

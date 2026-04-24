@@ -364,7 +364,7 @@ end
 
 function meta:KnockDown(time)
 	if P_Team(self) == TEAM_HUMAN then
-		self:GiveStatus("knockdown", time or 3)
+		self:GiveStatus("knockdown", math.Round((time or 3) * (GAMEMODE.ZombieKnockdownMul or 1)))
 	end
 end
 
