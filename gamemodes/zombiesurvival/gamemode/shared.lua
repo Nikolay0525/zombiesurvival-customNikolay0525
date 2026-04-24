@@ -160,9 +160,20 @@ if SERVER then
         return i - 1 
     end
 
+    local function LoadAndStoreSoundsWav(baseSoundName, targetTable)
+        local i = 1
+        while file.Exists("sound/" .. baseSoundName .. i .. ".wav", "GAME") do
+            local fullPath = baseSoundName .. i .. ".wav"
+            resource.AddFile("sound/" .. fullPath)
+            table.insert(targetTable, fullPath)
+            i = i + 1
+        end
+        return i - 1 
+    end
+
     LoadAndStoreSounds("zombiesurvival/custom/win", GM.WinMusicPlaylist)
     LoadAndStoreSounds("zombiesurvival/custom/lose", GM.LoseMusicPlaylist)
-    LoadAndStoreSounds("zombiesurvival/custom/lasthuman", GM.LastHumanMusicPlaylist)
+    LoadAndStoreSoundsWav("zombiesurvival/custom/lasthuman", GM.LastHumanMusicPlaylist)
 	LoadAndStoreSounds("zombiesurvival/custom/juggernaut_spawn", GM.JuggernautSpawnSounds)
 
 	-- Precache countdown sounds (assuming they are named 1.ogg to 10.ogg)
@@ -199,6 +210,7 @@ if SERVER then
         --print("[ZS Дебаг] Розіслали трек Останньої Людини всім: " .. track)
 
         local duration = SoundDuration(track)
+		print(duration)
         if not duration or duration <= 0 then duration = 180 end
 
         -- Запускаємо таймер для наступного треку

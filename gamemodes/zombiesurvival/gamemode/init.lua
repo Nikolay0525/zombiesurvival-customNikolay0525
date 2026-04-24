@@ -1605,7 +1605,7 @@ end
 
 function GM:LastHuman(pl)
 	if not LASTHUMAN then
-		if self:GetWave() > 0 then 
+		if self:GetWave() > 4 then 
 			self:StartJuggernautEvent(pl)
 		else
 			self:UpdateLastHumanTrack()
@@ -4612,10 +4612,13 @@ function GM:MakeJuggernaut(ply)
 	ply:AddInventoryItem("trinket_momentumsupsysiii") -- -20% melee delay, +12% knockback
 	ply:AddInventoryItem("trinket_hemoadrenaliii")    -- Converts 4% melee damage to Blood Armor
 	ply:AddInventoryItem("trinket_curbstompers")      -- Stomp damage, instant headcrab kill
+	
+	-- Give arsenal on the back
+	ply:AddInventoryItem("trinket_arsenalpack")      -- now he can buy things
 
 	-- Give insane stats
-	ply:SetMaxHealth(1500)
-	ply:SetHealth(1500)
+	ply:SetMaxHealth(1000)
+	ply:SetHealth(1000)
 
 	net.Start("ZS_PlayGlobalSound")
 		net.WriteString(table.Random(self.JuggernautSpawnSounds))
