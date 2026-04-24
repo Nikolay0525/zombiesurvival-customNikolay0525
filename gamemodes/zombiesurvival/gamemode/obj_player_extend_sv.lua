@@ -362,9 +362,14 @@ function meta:WouldDieFrom(damage, hitpos)
 	return self:Health() <= damage * GAMEMODE:GetZombieDamageScale(hitpos, self)
 end
 
-function meta:KnockDown(time)
+function meta:KnockDown(time, isZombieHitting)
+	isZombieHitting = isZombieHitting or false
 	if P_Team(self) == TEAM_HUMAN then
-		self:GiveStatus("knockdown", math.Round((time or 3) * (GAMEMODE.ZombieKnockdownMul or 1)))
+		if isZombieHitting then
+			self:GiveStatus("knockdown", math.Round((time or 3) * (GAMEMODE.ZombieKnockdownMul or 1)))
+		else
+			self:GiveStatus("knockdown", time or 3)
+		end
 	end
 end
 
