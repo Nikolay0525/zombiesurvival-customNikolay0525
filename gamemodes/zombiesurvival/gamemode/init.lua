@@ -4559,6 +4559,12 @@ function GM:StartJuggernautEvent(ply)
 	timer.Create("ZS_JuggernautCountdown", 1, 11, function()
 		if not IsValid(ply) or not ply:Alive() then
 			timer.Remove("ZS_JuggernautCountdown")
+			-- Broadcast "abort" signal to all clients to hide the UI
+			net.Start("ZS_PlayGlobalSound")
+				net.WriteString("") -- Play no sound
+				net.WriteInt(-1, 8) -- Send -1 to clear the UI
+				net.WriteString("") -- Empty name
+			net.Broadcast()
 			
 			return
 		end
