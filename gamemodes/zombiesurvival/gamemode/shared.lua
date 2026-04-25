@@ -139,7 +139,10 @@ if SERVER then
     util.AddNetworkString("ZS_PlayServerMusic")
 	util.AddNetworkString("ZS_PlayEndMusic")
 	util.AddNetworkString("ZS_UpdateLHTrack")
+	util.AddNetworkString("ZS_PlayGlobalSound")
 
+	-- Load Juggernaut spawn sounds
+	GM.JuggernautSpawnSounds = {}
     GM.WinMusicPlaylist = {}
     GM.LoseMusicPlaylist = {}
     GM.LastHumanMusicPlaylist = {}
@@ -157,9 +160,26 @@ if SERVER then
         return i - 1 
     end
 
+    local function LoadAndStoreSoundsWav(baseSoundName, targetTable)
+        local i = 1
+        while file.Exists("sound/" .. baseSoundName .. i .. ".wav", "GAME") do
+            local fullPath = baseSoundName .. i .. ".wav"
+            resource.AddFile("sound/" .. fullPath)
+            table.insert(targetTable, fullPath)
+            i = i + 1
+        end
+        return i - 1 
+    end
+
     LoadAndStoreSounds("zombiesurvival/custom/win", GM.WinMusicPlaylist)
     LoadAndStoreSounds("zombiesurvival/custom/lose", GM.LoseMusicPlaylist)
-    LoadAndStoreSounds("zombiesurvival/custom/lasthuman", GM.LastHumanMusicPlaylist)
+    LoadAndStoreSoundsWav("zombiesurvival/custom/lasthuman", GM.LastHumanMusicPlaylist)
+	LoadAndStoreSounds("zombiesurvival/custom/juggernaut_spawn", GM.JuggernautSpawnSounds)
+
+	-- Precache countdown sounds (assuming they are named 1.ogg to 10.ogg)
+	for i = 1, 10 do
+		resource.AddFile("sound/zombiesurvival/custom/countdown/" .. i .. ".ogg")
+	end
     
     local deathSoundsCount = LoadAndStoreSounds("zombiesurvival/custom/death", GM.DeathSoundsList)
     SetGlobalInt("ZS_DeathSoundCount", deathSoundsCount)
@@ -190,6 +210,7 @@ if SERVER then
         --print("[ZS Дебаг] Розіслали трек Останньої Людини всім: " .. track)
 
         local duration = SoundDuration(track)
+		
         if not duration or duration <= 0 then duration = 180 end
 
         -- Запускаємо таймер для наступного треку

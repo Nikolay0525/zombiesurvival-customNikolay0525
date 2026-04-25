@@ -2,7 +2,7 @@ INC_SERVER()
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
 	if ent:IsPlayer() then
-		ent:GiveStatus("dimvision", 5)
+		ent:GiveStatus("dimvision", math.Round(5 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 	end
 
 	self.BaseClass.ApplyMeleeDamage(self, ent, trace, damage)

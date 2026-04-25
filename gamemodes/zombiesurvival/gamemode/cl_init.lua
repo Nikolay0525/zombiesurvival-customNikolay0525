@@ -81,9 +81,82 @@ end)
 
 net.Receive("ZS_PlayWelcomeSound", function()
     local soundPath = net.ReadString()
-    if soundPath and soundPath ~= "" then
-        MySelf:EmitSound(soundPath, 0, 100, 1)
+    if soundPath ~= "" then
+        -- Grab the ConVar safely
+        local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+        
+        if shouldPlay then
+            -- Fallback to 1 (100%) if GAMEMODE.BeatsVolume is nil for some reason
+            local vol = GAMEMODE.BeatsVolume or 1
+            
+            -- SoundLevel 0 (SNDLVL_NONE) makes it a 2D sound (no 3D origin)
+            -- 100 is the pitch
+            -- vol is the dynamic volume controlled by the player's ZS settings
+            if IsValid(LocalPlayer()) then
+                LocalPlayer():EmitSound(soundPath, 0, 100, vol)
+            end
+        end
     end
+end)
+
+local countdownNum = -1
+local countdownScale = 1
+local juggName = "" 
+
+net.Receive("ZS_PlayGlobalSound", function()
+    local soundPath = net.ReadString()
+    local num = net.ReadInt(8)
+    local nick = net.ReadString() 
+    
+    if soundPath ~= "" then
+        -- Grab the ConVar safely
+        local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+        
+        if shouldPlay then
+            local vol = GAMEMODE.BeatsVolume or 1
+            
+            if IsValid(LocalPlayer()) then
+                LocalPlayer():EmitSound(soundPath, 0, 100, vol)
+            end
+        end
+    end
+    
+    countdownNum = num
+    juggName = nick or "Хтось"
+    countdownScale = 2 
+end)
+
+
+net.Receive("ZS_PlayEndMusic", function()
+    local trackToPlay = net.ReadString()
+    if trackToPlay and trackToPlay ~= "" then
+		local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+		if shouldPlay then
+            local vol = GAMEMODE.BeatsVolume or 1
+			timer.Simple(0.5, function() 
+				if IsValid(LocalPlayer()) then
+                    LocalPlayer():EmitSound(trackToPlay, 0, 100, vol)
+                end
+			end)
+		end
+    end
+end)
+
+hook.Add("HUDPaint", "JuggernautCountdownUI", function()
+    if countdownNum <= 0 then return end
+    
+    local w, h = ScrW(), ScrH()
+    countdownScale = math.Approach(countdownScale, 1, FrameTime() * 5)
+    
+    -- Використовуємо нік у тексті
+    local text = juggName .. " СТАНЕТ ДЖАГЕРНАУТОМ ЧЕРЕЗ: " .. countdownNum
+    surface.SetFont("ZS3D2DFont2Small") 
+    
+    draw.SimpleText(text, "ZS3D2DFont2Small", w/2 + 2, h/4 + 2, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(text, "ZS3D2DFont2Small", w/2, h/4, Color(255, 50, 50, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)
 
 -- Remove when model decal crash is fixed.
@@ -822,7 +895,7 @@ function GM:PlayBeats(teamid, fear)
     local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
     if not beats then return end
 
-    LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 30), 3)
+    LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 20), 3)
 
     local snd = beats[LastBeatLevel]
     if snd then
@@ -2126,15 +2199,6 @@ function GM:EndRound(winner, nextmap)
     end)
 end
 
-net.Receive("ZS_PlayEndMusic", function()
-    local trackToPlay = net.ReadString()
-    if trackToPlay and trackToPlay ~= "" then
-        timer.Simple(0.5, function() 
-            surface.PlaySound(trackToPlay) 
-        end)
-    end
-end)
-
 function GM:WeaponDeployed(pl, wep)
 	self:DoChangeDeploySpeed(wep)
 end
@@ -2142,7 +2206,25 @@ end
 function GM:LocalPlayerDied(attackername)
 	LASTDEATH = RealTime()
 
-	surface_PlaySound(GAMEMODE:GetRandomDeathSound())
+	local soundPath = GAMEMODE:GetRandomDeathSound()
+
+	if soundPath ~= "" then
+        -- Grab the ConVar safely
+        local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+        
+        if shouldPlay then
+            -- Fallback to 1 (100%) if GAMEMODE.BeatsVolume is nil for some reason
+            local vol = GAMEMODE.BeatsVolume or 1
+            
+            -- SoundLevel 0 (SNDLVL_NONE) makes it a 2D sound (no 3D origin)
+            -- 100 is the pitch
+            -- vol is the dynamic volume controlled by the player's ZS settings
+            if IsValid(LocalPlayer()) then
+                LocalPlayer():EmitSound(soundPath, 0, 100, vol)
+            end
+        end
+    end
 	if attackername then
 		self:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Get("you_have_died"))
 		self:CenterNotify(COLOR_RED, translate.Format(self.PantsMode and "you_were_kicked_by_x" or "you_were_killed_by_x", tostring(attackername)))

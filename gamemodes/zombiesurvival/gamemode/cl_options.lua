@@ -120,9 +120,20 @@ cvars.AddChangeCallback("zs_damagefloaterswalls", function(cvar, oldvalue, newva
 	GAMEMODE.DamageNumberThroughWalls = tonumber(newvalue) == 1
 end)
 
+local nextPreviewTime = 0
+
 GM.BeatsVolume = math.Clamp(CreateClientConVar("zs_beatsvolume", 80, true, false):GetInt(), 0, 100) / 100
 cvars.AddChangeCallback("zs_beatsvolume", function(cvar, oldvalue, newvalue)
 	GAMEMODE.BeatsVolume = math.Clamp(tonumber(newvalue) or 0, 0, 100) / 100
+
+    if CurTime() > nextPreviewTime then
+        if IsValid(LocalPlayer()) then
+			local randomSound = math.random(1,14)
+            LocalPlayer():EmitSound("npc/zombie/zombie_voice_idle" .. randomSound .. ".wav", 0, 100, GAMEMODE.BeatsVolume)
+        end
+        
+        nextPreviewTime = CurTime() + 0.25
+    end
 end)
 
 GM.CrosshairLines = math.Clamp(CreateClientConVar("zs_crosshairlines", 4, true, false):GetInt(), 2, 8)

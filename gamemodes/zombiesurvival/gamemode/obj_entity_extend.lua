@@ -429,7 +429,8 @@ function meta:GetHolder()
 	end
 end
 
-function meta:ThrowFromPosition(pos, force, noknockdown)
+function meta:ThrowFromPosition(pos, force, noknockdown, isZombieHitting)
+	isZombieHitting = isZombieHitting or false
 	if force == 0 or self:IsProjectile() or self.NoThrowFromPosition then return false end
 
 	if self:IsPlayer() then
@@ -451,7 +452,7 @@ function meta:ThrowFromPosition(pos, force, noknockdown)
 		if SERVER and not noknockdown and self:IsPlayer() then
 			local absforce = math.abs(force)
 			if absforce >= 512 or self.IsClumsy and P_Team(self) == TEAM_HUMAN and absforce >= 32 then
-				self:KnockDown()
+				self:KnockDown(nil, isZombieHitting)
 			end
 		end
 		self:SetVelocity(force * (self:LocalToWorld(self:OBBCenter()) - pos):GetNormalized())
@@ -460,7 +461,8 @@ function meta:ThrowFromPosition(pos, force, noknockdown)
 	end
 end
 
-function meta:ThrowFromPositionSetZ(pos, force, zmul, noknockdown)
+function meta:ThrowFromPositionSetZ(pos, force, zmul, noknockdown, isZombieHitting)
+	isZombieHitting = isZombieHitting or false
 	if force == 0 or self:IsProjectile() or self.NoThrowFromPosition then return false end
 	zmul = zmul or 0.7
 
@@ -487,7 +489,7 @@ function meta:ThrowFromPositionSetZ(pos, force, zmul, noknockdown)
 		if SERVER and not noknockdown and self:IsPlayer() then
 			local absforce = math.max(math.abs(force) * math.abs(zmul), math.abs(force))
 			if absforce >= 512 or self.IsClumsy and P_Team(self) == TEAM_HUMAN and absforce >= 32 then
-				self:KnockDown()
+				self:KnockDown(nil, isZombieHitting)
 			end
 		end
 

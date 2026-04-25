@@ -37,8 +37,8 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 		for _, ent in pairs(util.BlastAlloc(self, owner, owner:GetPos(), 57)) do
 			if ent:IsValidLivingPlayer() and gamemode.Call("PlayerShouldTakeDamage", ent, owner) and ent ~= owner then
-				ent:GiveStatus("frost", 4)
-				ent:AddLegDamageExt(10, owner, self, SLOWTYPE_COLD)
+				ent:GiveStatus("frost", math.Round(4 * (GAMEMODE.ZombieHitEffectsMul or 1)))
+				ent:AddLegDamageExt(math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)), owner, self, SLOWTYPE_COLD)
 			end
 		end
 

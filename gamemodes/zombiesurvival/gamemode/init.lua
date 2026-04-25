@@ -858,6 +858,41 @@ function GM:CreateZombieGas()
 	if NOZOMBIEGASSES then return end
 
 	local humanspawns = team.GetValidSpawnPoint(TEAM_HUMAN)
+
+	local spawnA = humanspawns[math.random(#humanspawns)]
+	local spawnB = humanspawns[math.random(#humanspawns)]
+	local spawnC = humanspawns[math.random(#humanspawns)]
+	if spawnA and spawnA:IsValid() then
+		local ent = ents.Create("prop_arsenalcrate")
+		if ent:IsValid() then
+			ent:SetPos(spawnA:GetPos() + Vector(0, 0, 8))
+			ent:Spawn()
+			ent:DropToFloor()
+			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+			ent.NoTakeOwnership = true
+		end
+	end
+	if spawnB and spawnB:IsValid() then
+		local ent = ents.Create("prop_resupplybox")
+		if ent:IsValid() then
+			ent:SetPos(spawnB:GetPos() + Vector(0, 0, 16))
+			ent:Spawn()
+			ent:DropToFloor()
+			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+			ent.NoTakeOwnership = true
+		end
+	end
+	if spawnC and spawnC:IsValid() then
+		local ent = ents.Create("prop_remantler")
+		if ent:IsValid() then
+			ent:SetPos(spawnC:GetPos() + Vector(0, 0, 16))
+			ent:Spawn()
+			ent:DropToFloor()
+			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+			ent.NoTakeOwnership = true
+		end
+	end
+
 	local zombiespawns = team.GetValidSpawnPoint(TEAM_UNDEAD)
 
 	for _, zombie_spawn in pairs(zombiespawns) do
@@ -1570,8 +1605,11 @@ end
 
 function GM:LastHuman(pl)
 	if not LASTHUMAN then
-		self:UpdateLastHumanTrack()
-		
+		if self:GetWave() > 4 then 
+			self:StartJuggernautEvent(pl)
+		else
+			self:UpdateLastHumanTrack()
+		end
 		net.Start("zs_lasthuman")
 			net.WriteEntity(pl or NULL)
 		net.Broadcast()
@@ -4285,49 +4323,49 @@ function GM:WaveStateChanged(newstate)
 
 			-- We should spawn a crate in a random spawn point if no one has any.
 			if not self.ZombieEscape and #ents.FindByClass("prop_arsenalcrate") == 0 then
-				local have = false
-				for _, pl in pairs(humans) do
-					if pl:HasWeapon("weapon_zs_arsenalcrate") then
-						have = true
-						break
-					end
-				end
+				-- local have = false
+				-- for _, pl in pairs(humans) do
+				-- 	if pl:HasWeapon("weapon_zs_arsenalcrate") then
+				-- 		have = true
+				-- 		break
+				-- 	end
+				-- end
 
-				if not have and #humans >= 1 then
-					local spawnA = self:PlayerSelectSpawn(humans[math.random(#humans)])
-					local spawnB = self:PlayerSelectSpawn(humans[math.random(#humans)])
-					local spawnC = self:PlayerSelectSpawn(humans[math.random(#humans)])
-					if spawnA and spawnA:IsValid() then
-						local ent = ents.Create("prop_arsenalcrate")
-						if ent:IsValid() then
-							ent:SetPos(spawnA:GetPos() + Vector(0, 0, 8))
-							ent:Spawn()
-							ent:DropToFloor()
-							ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
-							ent.NoTakeOwnership = true
-						end
-					end
-					if spawnB and spawnB:IsValid() then
-						local ent = ents.Create("prop_resupplybox")
-						if ent:IsValid() then
-							ent:SetPos(spawnB:GetPos() + Vector(0, 0, 16))
-							ent:Spawn()
-							ent:DropToFloor()
-							ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
-							ent.NoTakeOwnership = true
-						end
-					end
-					if spawnC and spawnC:IsValid() then
-						local ent = ents.Create("prop_remantler")
-						if ent:IsValid() then
-							ent:SetPos(spawnC:GetPos() + Vector(0, 0, 16))
-							ent:Spawn()
-							ent:DropToFloor()
-							ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
-							ent.NoTakeOwnership = true
-						end
-					end
-				end
+				-- if not have and #humans >= 1 then
+				-- 	local spawnA = self:PlayerSelectSpawn(humans[math.random(#humans)])
+				-- 	local spawnB = self:PlayerSelectSpawn(humans[math.random(#humans)])
+				-- 	local spawnC = self:PlayerSelectSpawn(humans[math.random(#humans)])
+				-- 	if spawnA and spawnA:IsValid() then
+				-- 		local ent = ents.Create("prop_arsenalcrate")
+				-- 		if ent:IsValid() then
+				-- 			ent:SetPos(spawnA:GetPos() + Vector(0, 0, 8))
+				-- 			ent:Spawn()
+				-- 			ent:DropToFloor()
+				-- 			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+				-- 			ent.NoTakeOwnership = true
+				-- 		end
+				-- 	end
+				-- 	if spawnB and spawnB:IsValid() then
+				-- 		local ent = ents.Create("prop_resupplybox")
+				-- 		if ent:IsValid() then
+				-- 			ent:SetPos(spawnB:GetPos() + Vector(0, 0, 16))
+				-- 			ent:Spawn()
+				-- 			ent:DropToFloor()
+				-- 			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+				-- 			ent.NoTakeOwnership = true
+				-- 		end
+				-- 	end
+				-- 	if spawnC and spawnC:IsValid() then
+				-- 		local ent = ents.Create("prop_remantler")
+				-- 		if ent:IsValid() then
+				-- 			ent:SetPos(spawnC:GetPos() + Vector(0, 0, 16))
+				-- 			ent:Spawn()
+				-- 			ent:DropToFloor()
+				-- 			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER) -- Just so no one gets stuck in it.
+				-- 			ent.NoTakeOwnership = true
+				-- 		end
+				-- 	end
+				-- end
 			end
 		end
 
@@ -4512,6 +4550,86 @@ end
 function GM:OnZEWeaponPickup(pl, wep)
 end
 
+-- Call this function when the Last Human is chosen
+function GM:StartJuggernautEvent(ply)
+
+	if not IsValid(ply) then return end
+
+	local count = 10
+	timer.Create("ZS_JuggernautCountdown", 1, 11, function()
+		if not IsValid(ply) or not ply:Alive() then
+			timer.Remove("ZS_JuggernautCountdown")
+			-- Broadcast "abort" signal to all clients to hide the UI
+			net.Start("ZS_PlayGlobalSound")
+				net.WriteString("") -- Play no sound
+				net.WriteInt(-1, 8) -- Send -1 to clear the UI
+				net.WriteString("") -- Empty name
+			net.Broadcast()
+			
+			return
+		end
+
+		if count > 0 then
+			-- Broadcast countdown to all clients for custom UI
+			net.Start("ZS_PlayGlobalSound")
+				net.WriteString("zombiesurvival/custom/countdown/" .. count .. ".ogg")
+				net.WriteInt(count, 8) -- Send the number for the UI
+				net.WriteString(ply:Nick())
+			net.Broadcast()
+			
+			count = count - 1
+		else
+			self:MakeJuggernaut(ply)
+		end
+	end)
+end
+
+function GM:MakeJuggernaut(ply)
+	ply:DropAll()
+
+	ply:Give("weapon_zs_frotchet")
+	-- Give weapons and ammo
+	ply:Give("weapon_zs_boomstick")
+	ply:GiveAmmo(10000, "buckshot")
+	ply:Give("weapon_zs_bulwark")
+	ply:GiveAmmo(30000, "smg1")
+	ply:Give("weapon_zs_medicalkit")
+	ply:GiveAmmo(1000,"Battery")
+	
+	-- Weapon handling & Speed
+	ply:AddInventoryItem("trinket_autoreload")      -- Auto-reloads unequipped weapons
+	ply:AddInventoryItem("trinket_analgestic")      -- +25% deploy speed, resists slows and knockdowns
+	ply:AddInventoryItem("trinket_ammovestiii")     -- +12% reload speed
+	ply:AddInventoryItem("trinket_olympianframe")   -- Removes heavy weapon movement penalty (crucial for minigun)
+	
+	-- Survivability & Resistances
+	ply:AddInventoryItem("trinket_eodvest")         -- -35% explosive dmg, -50% fire dmg
+	ply:AddInventoryItem("trinket_composite")       -- -16% melee dmg, -16% projectile dmg
+	ply:AddInventoryItem("trinket_forcedamp")       -- Immune to prop knockdowns, -33% physics dmg
+	
+	-- Melee & Close Combat (For the Hammer)
+	ply:AddInventoryItem("trinket_powergauntlet")     -- Charges melee damage up to +45%
+	ply:AddInventoryItem("trinket_momentumsupsysiii") -- -20% melee delay, +12% knockback
+	ply:AddInventoryItem("trinket_hemoadrenaliii")    -- Converts 4% melee damage to Blood Armor
+	ply:AddInventoryItem("trinket_curbstompers")      -- Stomp damage, instant headcrab kill
+	
+	-- Give arsenal on the back
+	ply:AddInventoryItem("trinket_arsenalpack")      -- now he can buy things
+
+	-- Give insane stats
+	ply:SetMaxHealth(1000)
+	ply:SetHealth(1000)
+
+	net.Start("ZS_PlayGlobalSound")
+		net.WriteString(table.Random(self.JuggernautSpawnSounds))
+		net.WriteInt(0, 8) 
+		net.WriteString(ply:Nick()) -- ДОДАНО: Передаємо нік і сюди
+	net.Broadcast()
+
+	-- NOW start the epic Last Human music
+	self:UpdateLastHumanTrack()
+end
+
 net.Receive("zs_changeclass", function(len, sender)
 	if sender:Team() ~= TEAM_UNDEAD or sender.Revive or GAMEMODE.PantsMode or GAMEMODE:IsClassicMode() or GAMEMODE:IsBabyMode() or GAMEMODE.ZombieEscape then return end
 
@@ -4567,3 +4685,4 @@ net.Receive("zs_nestspec", function(len, sender)
 		sender:SpectateEntity(nest)
 	end
 end)
+

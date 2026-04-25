@@ -8,7 +8,7 @@ SWEP.MeleeDamage = math.Round(15 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.BleedDamage = math.Round(15 * (GAMEMODE.ZombieOverallDamageMul or 1))
 SWEP.SlowDownScale = 5.4
 SWEP.MeleeDamageVsProps = math.Round(40 * (GAMEMODE.ZombieOverallDamageMul or 1))
-SWEP.EnfeebleDurationMul = 10 / SWEP.MeleeDamage
+SWEP.EnfeebleDurationMul = (10 / SWEP.MeleeDamage) * (GAMEMODE.ZombieHitEffectsMul or 1)
 
 function SWEP:Reload()
 	self:SecondaryAttack()
@@ -38,7 +38,7 @@ function SWEP:ApplyMeleeDamage(ent, trace, damage)
 			gt.Applier = self:GetOwner()
 		end
 
-		ent:GiveStatus("dimvision", 10)
+		ent:GiveStatus("dimvision", math.Round(10 * (GAMEMODE.ZombieHitEffectsMul or 1)))
 
 		local bleed = ent:GiveStatus("bleed")
 		if bleed and bleed:IsValid() then

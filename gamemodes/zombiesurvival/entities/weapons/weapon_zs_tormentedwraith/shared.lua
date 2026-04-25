@@ -25,7 +25,7 @@ function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * armdelay)
 
 	self.MeleeDelay = 0.8
-	self.MeleeDamage = 43
+	self.MeleeDamage = math.Round(43 * (GAMEMODE.ZombieOverallDamageMul or 1))
 	self:StartSwinging()
 end
 
@@ -37,7 +37,7 @@ function SWEP:SecondaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Secondary.Delay * armdelay)
 
 	self.MeleeDelay = 0.4
-	self.MeleeDamage = 21
+	self.MeleeDamage = math.Round(21 * (GAMEMODE.ZombieOverallDamageMul or 1))
 	self:StartSwinging(true)
 end
 

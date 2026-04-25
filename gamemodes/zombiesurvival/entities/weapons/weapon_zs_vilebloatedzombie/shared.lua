@@ -3,7 +3,7 @@ SWEP.PrintName = "Vile Bloated Zombie"
 SWEP.Base = "weapon_zs_zombie"
 
 SWEP.MeleeDamage = math.Round(32 * (GAMEMODE.ZombieOverallDamageMul or 1))
-SWEP.PoisonDmgMul = 0.5
+SWEP.PoisonDmgMul = 0.5 * (GAMEMODE.ZombieHitEffectsMul or 1)
 SWEP.MeleeForceScale = 1.25
 
 SWEP.Primary.Delay = 1.4
