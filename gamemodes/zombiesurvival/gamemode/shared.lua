@@ -210,7 +210,7 @@ if SERVER then
         --print("[ZS Дебаг] Розіслали трек Останньої Людини всім: " .. track)
 
         local duration = SoundDuration(track)
-		print(duration)
+		
         if not duration or duration <= 0 then duration = 180 end
 
         -- Запускаємо таймер для наступного треку

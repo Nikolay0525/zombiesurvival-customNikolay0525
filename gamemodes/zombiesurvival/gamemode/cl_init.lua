@@ -81,27 +81,68 @@ end)
 
 net.Receive("ZS_PlayWelcomeSound", function()
     local soundPath = net.ReadString()
-    if soundPath and soundPath ~= "" then
-        MySelf:EmitSound(soundPath, 0, 100, 1)
+    if soundPath ~= "" then
+        -- Grab the ConVar safely
+        local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+        
+        if shouldPlay then
+            -- Fallback to 1 (100%) if GAMEMODE.BeatsVolume is nil for some reason
+            local vol = GAMEMODE.BeatsVolume or 1
+            
+            -- SoundLevel 0 (SNDLVL_NONE) makes it a 2D sound (no 3D origin)
+            -- 100 is the pitch
+            -- vol is the dynamic volume controlled by the player's ZS settings
+            if IsValid(LocalPlayer()) then
+                LocalPlayer():EmitSound(soundPath, 0, 100, vol)
+            end
+        end
     end
 end)
 
 local countdownNum = -1
 local countdownScale = 1
-local juggName = "" -- ДОДАНО: Змінна для збереження ніка
+local juggName = "" 
 
 net.Receive("ZS_PlayGlobalSound", function()
     local soundPath = net.ReadString()
     local num = net.ReadInt(8)
-    local nick = net.ReadString() -- ДОДАНО: Читаємо нік від сервера
+    local nick = net.ReadString() 
     
     if soundPath ~= "" then
-        surface.PlaySound(soundPath)
+        -- Grab the ConVar safely
+        local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+        
+        if shouldPlay then
+            local vol = GAMEMODE.BeatsVolume or 1
+            
+            if IsValid(LocalPlayer()) then
+                LocalPlayer():EmitSound(soundPath, 0, 100, vol)
+            end
+        end
     end
     
     countdownNum = num
-    juggName = nick or "Хтось" -- Зберігаємо нік
+    juggName = nick or "Хтось"
     countdownScale = 2 
+end)
+
+
+net.Receive("ZS_PlayEndMusic", function()
+    local trackToPlay = net.ReadString()
+    if trackToPlay and trackToPlay ~= "" then
+		local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+		if shouldPlay then
+            local vol = GAMEMODE.BeatsVolume or 1
+			timer.Simple(0.5, function() 
+				if IsValid(LocalPlayer()) then
+                    LocalPlayer():EmitSound(trackToPlay, 0, 100, vol)
+                end
+			end)
+		end
+    end
 end)
 
 hook.Add("HUDPaint", "JuggernautCountdownUI", function()
@@ -2157,15 +2198,6 @@ function GM:EndRound(winner, nextmap)
         end
     end)
 end
-
-net.Receive("ZS_PlayEndMusic", function()
-    local trackToPlay = net.ReadString()
-    if trackToPlay and trackToPlay ~= "" then
-        timer.Simple(0.5, function() 
-            surface.PlaySound(trackToPlay) 
-        end)
-    end
-end)
 
 function GM:WeaponDeployed(pl, wep)
 	self:DoChangeDeploySpeed(wep)
