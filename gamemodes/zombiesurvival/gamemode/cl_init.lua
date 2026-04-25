@@ -2206,7 +2206,25 @@ end
 function GM:LocalPlayerDied(attackername)
 	LASTDEATH = RealTime()
 
-	surface_PlaySound(GAMEMODE:GetRandomDeathSound())
+	local soundPath = GAMEMODE:GetRandomDeathSound()
+
+	if soundPath ~= "" then
+        -- Grab the ConVar safely
+        local cvMusic = GetConVar("zs_playmusic")
+        local shouldPlay = cvMusic and cvMusic:GetBool() or true
+        
+        if shouldPlay then
+            -- Fallback to 1 (100%) if GAMEMODE.BeatsVolume is nil for some reason
+            local vol = GAMEMODE.BeatsVolume or 1
+            
+            -- SoundLevel 0 (SNDLVL_NONE) makes it a 2D sound (no 3D origin)
+            -- 100 is the pitch
+            -- vol is the dynamic volume controlled by the player's ZS settings
+            if IsValid(LocalPlayer()) then
+                LocalPlayer():EmitSound(soundPath, 0, 100, vol)
+            end
+        end
+    end
 	if attackername then
 		self:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Get("you_have_died"))
 		self:CenterNotify(COLOR_RED, translate.Format(self.PantsMode and "you_were_kicked_by_x" or "you_were_killed_by_x", tostring(attackername)))
