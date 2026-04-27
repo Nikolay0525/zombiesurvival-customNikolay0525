@@ -506,6 +506,8 @@ end
 function meta:SetSpeed(speed)
     if not speed then speed = 200 end
 
+	self.m_BaseSpeed = speed
+
     -- Check if player is actively sprinting with enough armor
     local isSprinting = self:KeyDown(IN_SPEED) and self:GetBloodArmor() > 0 and self:IsSkillActive(SKILL_CARDIOTONIC)
     

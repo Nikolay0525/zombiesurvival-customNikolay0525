@@ -3454,9 +3454,12 @@ function GM:WeaponDeployed(pl, wep)
 	timer.Remove(timername)
 
 	local speed = pl:ResetSpeed(true) -- Determine what speed we SHOULD get without actually setting it.
-	if speed < pl:GetMaxSpeed() then
+
+	local currentBase = pl.m_BaseSpeed or pl:GetMaxSpeed()
+
+	if speed < currentBase then
 		pl:SetSpeed(speed)
-	elseif pl:GetMaxSpeed() < speed then
+	else
 		local unbound = pl:IsSkillActive(SKILL_UNBOUND) and 0.4 or 1
 
 		timer.Create(timername, (0.333 / (pl.DeploySpeedMultiplier or 1)) * unbound, 1, function() if pl:IsValid() then pl:SetHumanSpeed(speed) end end)
