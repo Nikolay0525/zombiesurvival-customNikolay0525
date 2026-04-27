@@ -1395,15 +1395,20 @@ function GM:Think()
 				if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and pl:IsSkillActive(SKILL_CARDIOTONIC) then
 					if pl:GetBloodArmor() > 0 then
 						pl:SetBloodArmor(pl:GetBloodArmor() - 1)
-						if pl:GetBloodArmor() == 0 and pl:IsSkillActive(SKILL_BLOODLETTER) then
-							local bleed = pl:GiveStatus("bleed")
-							if bleed and bleed:IsValid() then
-								bleed:AddDamage(5)
-								bleed.Damager = pl
-							end
-						end
-					else
-						pl:ResetSpeed()
+						-- Trigger events ONLY when armor exactly hits 0
+                        if pl:GetBloodArmor() == 0 then
+                            if pl:IsSkillActive(SKILL_BLOODLETTER) then
+                                local bleed = pl:GiveStatus("bleed")
+                                if bleed and bleed:IsValid() then
+                                    bleed:AddDamage(5)
+                                    bleed.Damager = pl
+                                end
+                            end
+                            -- Reset speed once to drop them back to walking
+                            pl:ResetSpeed()
+                        end
+					-- else
+					-- 	pl:ResetSpeed()
 					end
 				end
 
@@ -3474,15 +3479,15 @@ function GM:KeyPress(pl, key)
 				pl:DispatchAltUse()
 
 				if not pl:IsCarrying() and pl:KeyPressed(IN_SPEED) and pl:IsSkillActive(SKILL_CARDIOTONIC) and pl:GetBloodArmor() > 0 then
-					pl:SetBloodArmor(pl:GetBloodArmor() - 1)
+					--pl:SetBloodArmor(pl:GetBloodArmor() - 1)
 					pl:EmitSound("player/suit_sprint.wav", 50)
-					if pl:GetBloodArmor() == 0 and pl:IsSkillActive(SKILL_BLOODLETTER) then
-						local bleed = pl:GiveStatus("bleed")
-						if bleed and bleed:IsValid() then
-							bleed:AddDamage(5)
-							bleed.Damager = pl
-						end
-					end
+					-- if pl:GetBloodArmor() == 0 and pl:IsSkillActive(SKILL_BLOODLETTER) then
+					-- 	local bleed = pl:GiveStatus("bleed")
+					-- 	if bleed and bleed:IsValid() then
+					-- 		bleed:AddDamage(5)
+					-- 		bleed.Damager = pl
+					-- 	end
+					-- end
 					pl:ResetSpeed()
 				end
 			elseif pl:Team() == TEAM_UNDEAD then
@@ -3512,6 +3517,13 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	end
+end
+
+-- Hook KeyRelease to instantly remove the speed bonus when the key is dropped
+function GM:KeyRelease(pl, key)
+    if key == IN_SPEED and pl:Alive() and pl:Team() == TEAM_HUMAN then
+        pl:ResetSpeed()
+    end
 end
 
 function GM:GetNearestSpawn(pos, teamid)

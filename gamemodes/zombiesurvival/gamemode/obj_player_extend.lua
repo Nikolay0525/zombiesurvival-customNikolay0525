@@ -504,13 +504,17 @@ function meta:TraceHull(distance, mask, size, filter, start)
 end
 
 function meta:SetSpeed(speed)
-	if not speed then speed = 200 end
+    if not speed then speed = 200 end
 
-	local runspeed = self:GetBloodArmor() > 0 and self:IsSkillActive(SKILL_CARDIOTONIC) and speed + 40 or speed
-
-	self:SetWalkSpeed(speed)
-	self:SetRunSpeed(runspeed)
-	self:SetMaxSpeed(runspeed)
+    -- Check if player is actively sprinting with enough armor
+    local isSprinting = self:KeyDown(IN_SPEED) and self:GetBloodArmor() > 0 and self:IsSkillActive(SKILL_CARDIOTONIC)
+    
+    -- Apply the bonus directly to WalkSpeed to bypass Source engine sprint bugs
+    local finalSpeed = isSprinting and (speed + 40) or speed
+    
+    self:SetWalkSpeed(finalSpeed)
+    self:SetRunSpeed(finalSpeed)
+    self:SetMaxSpeed(finalSpeed)
 end
 
 function meta:SetHumanSpeed(speed)
