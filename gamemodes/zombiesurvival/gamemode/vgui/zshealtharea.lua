@@ -56,7 +56,12 @@ local function ContentsPaint(self, w, h)
 				y = 142 * screenscale
 				wid, hei = 240 * screenscale, 14 * screenscale
 
-				healthperc = math.Clamp(bloodarmor / (lp.MaxBloodArmor or 10), 0, 1)
+				local maxBloodArmor = lp:GetNWInt("JuggMaxBA", 0)
+                if maxBloodArmor <= 0 then
+                    maxBloodArmor = lp.MaxBloodArmor or 10
+                end
+
+				healthperc = math.Clamp(bloodarmor / maxBloodArmor, 0, 1)
 				colHealth.r = 50 + healthperc * 205
 				colHealth.g = 0
 				colHealth.b = (1 - healthperc) * 50

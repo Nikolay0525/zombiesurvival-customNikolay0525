@@ -146,6 +146,42 @@ local P_GetPhantomHealth = M_Player.GetPhantomHealth
 
 local didBeaconSpawnedYet = false
 
+local PAUSE_TIME = 360000
+
+function GM:ToggleGamePause(shouldPause)
+	if self:GetWave() > 0 then return end
+
+    if shouldPause then
+        -- We store the remaining time before pausing to restore it later
+        self.PausedAtTime = CurTime()
+        self.PrePauseStart = self:GetWaveStart()
+        self.PrePauseEnd = self:GetWaveEnd()
+
+        -- Set timers to a massive value
+        self:SetWaveStart(CurTime() + PAUSE_TIME)
+        self:SetWaveEnd(CurTime() + PAUSE_TIME + 600)
+        SetGlobalBool("IsPausedMidGame", true)
+    else
+        if not GetGlobalBool("IsPausedMidGame") then return end
+        
+        -- Calculate how much time was left when we paused
+        local diffStart = self.PrePauseStart - self.PausedAtTime
+        local diffEnd = self.PrePauseEnd - self.PausedAtTime
+
+        -- Restore timers relative to current time
+        self:SetWaveStart(CurTime() + diffStart)
+        self:SetWaveEnd(CurTime() + diffEnd)
+        
+        SetGlobalBool("IsPausedMidGame", false )
+    end
+end
+
+-- Admin command to toggle pause anytime
+concommand.Add("zs_togglepause", function(ply)
+    if IsValid(ply) and not ply:IsAdmin() then return end
+    GAMEMODE:ToggleGamePause(not GetGlobalBool("IsPausedMidGame"))
+end)
+
 function GM:WorldHint(hint, pos, ent, lifetime, filter)
 	net.Start("zs_worldhint")
 		net.WriteString(hint)
@@ -397,28 +433,6 @@ function GM:AddResources()
 	resource.AddFile("sound/weapons/zs_power/power4.wav")
 
 	resource.AddFile("materials/zombiesurvival/arsenalcrate.png")
-
-	-- local function LoadAndStoreSounds(baseSoundName, targetTable)
-	-- 	local i = 1
-	-- 	while file.Exists("sound/" .. baseSoundName .. i .. ".ogg", "GAME") do
-	-- 		local fullPath = baseSoundName .. i .. ".ogg"
-			
-	-- 		resource.AddFile("sound/" .. fullPath)
-			
-	-- 		table.insert(targetTable, fullPath)
-			
-	-- 		i = i + 1
-	-- 	end
-	-- end
-
-	-- LoadAndStoreSounds("zombiesurvival/custom/win", self.WinMusicPlaylist)
-	-- LoadAndStoreSounds("zombiesurvival/custom/lose", self.LoseMusicPlaylist)
-	-- LoadAndStoreSounds("zombiesurvival/custom/lasthuman", self.LastHumanMusicPlaylist)
-	-- LoadAndStoreSounds("zombiesurvival/custom/death", self.DeathSoundsList)
-
-	-- table.Shuffle(self.WinMusicPlaylist)
-	-- table.Shuffle(self.LoseMusicPlaylist)
-	-- table.Shuffle(self.LastHumanMusicPlaylist)
 end
 
 function GM:Initialize()
@@ -1893,10 +1907,14 @@ function GM:DoRestartGame()
 			pl:KillSilent()
 		end
 	end
+
+	SetGlobalBool("IsPausedMidGame", false)
 end
 
 function GM:RestartGame()
 	timer.Remove("ZS_LastHumanMusicLoop")
+	
+	SetGlobalString("JuggernautName", "")
 	
 	for _, pl in pairs(player.GetAll()) do
 		pl:StripWeapons()
@@ -1935,6 +1953,7 @@ function GM:RestartGame()
 
 	timer.Simple(0.25, function() GAMEMODE:DoRestartGame() end)
 end
+
 
 function GM:InitPostEntityMap(fromze)
 	pcall(gamemode.Call, "LoadMapEditorFile")
@@ -3561,6 +3580,9 @@ function GM:PlayerUse(pl, ent)
 end
 
 function GM:PlayerDeath(pl, inflictor, attacker)
+	if pl.IsJuggernaut then
+		pl.IsJuggernaut = false
+	end
 end
 
 function GM:PlayerDeathSound()
@@ -4585,7 +4607,17 @@ function GM:StartJuggernautEvent(ply)
 end
 
 function GM:MakeJuggernaut(ply)
+
 	ply:DropAll()
+
+	ply.IsJuggernaut = true
+    ply.JuggernautMul = 10
+
+	ply.JuggernautBaseHealth = ply:GetMaxHealth()
+	ply.JuggernautBaseBloodArmor = ply.MaxBloodArmor or 0
+
+	SetGlobalString("JuggernautName", tostring(ply:Name()))
+    SetGlobalInt("JuggernautMul", ply.JuggernautMul)
 
 	ply:Give("weapon_zs_frotchet")
 	-- Give weapons and ammo
@@ -4595,7 +4627,7 @@ function GM:MakeJuggernaut(ply)
 	ply:GiveAmmo(30000, "smg1")
 	ply:Give("weapon_zs_medicalkit")
 	ply:GiveAmmo(1000,"Battery")
-	
+
 	-- Weapon handling & Speed
 	ply:AddInventoryItem("trinket_autoreload")      -- Auto-reloads unequipped weapons
 	ply:AddInventoryItem("trinket_analgestic")      -- +25% deploy speed, resists slows and knockdowns
@@ -4616,9 +4648,13 @@ function GM:MakeJuggernaut(ply)
 	-- Give arsenal on the back
 	ply:AddInventoryItem("trinket_arsenalpack")      -- now he can buy things
 
-	-- Give insane stats
-	ply:SetMaxHealth(1000)
-	ply:SetHealth(1000)
+	if ply:GetMaxHealth() > 0 then
+        ply:SetHealth(ply:GetMaxHealth())
+    end
+    
+    if ply.MaxBloodArmor and ply.MaxBloodArmor > 0 then
+        ply:SetBloodArmor(ply.MaxBloodArmor)
+    end
 
 	net.Start("ZS_PlayGlobalSound")
 		net.WriteString(table.Random(self.JuggernautSpawnSounds))

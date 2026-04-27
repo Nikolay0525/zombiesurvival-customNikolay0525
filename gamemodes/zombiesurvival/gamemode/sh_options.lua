@@ -693,6 +693,21 @@ cvars.AddChangeCallback("zs_roundlimit", function(cvar, oldvalue, newvalue)
 	GAMEMODE.RoundLimit = tonumber(newvalue) or 3
 end)
 
+GM.SetZombieOverallPowerMul = math.Round(CreateConVar("zs_setzombieoverallpowermul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Set all multiplier to this value."):GetFloat(), 2)
+cvars.AddChangeCallback("zs_setzombieoverallpowermul", function(cvar, oldvalue, newvalue)
+    local val = tonumber(newvalue) or 1
+    local strVal = tostring(math.ceil(100 * val) * 0.01)
+
+    GAMEMODE.SetZombieOverallPowerMul = tonumber(strVal)
+
+    RunConsoleCommand("zs_zombieoveralldamagemul", strVal)
+    RunConsoleCommand("zs_zombiehiteffectsmul", strVal)
+    RunConsoleCommand("zs_zombiemaxhealthmul", strVal)
+    RunConsoleCommand("zs_zombieprojhitdamagemul", strVal)
+    RunConsoleCommand("zs_zombieprojeffectsmul", strVal)
+    RunConsoleCommand("zs_zombieknockdownmul", strVal)
+end) 
+
 GM.ZombieOverallDamageMul = math.Round(CreateConVar("zs_zombieoveralldamagemul", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Scales the amount of melee damage that zombies deal."):GetFloat(), 2)
 cvars.AddChangeCallback("zs_zombieoveralldamagemul", function(cvar, oldvalue, newvalue)
     GAMEMODE.ZombieOverallDamageMul = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01

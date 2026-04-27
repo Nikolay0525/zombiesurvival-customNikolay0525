@@ -174,55 +174,113 @@ end
 
 -- For trinkets, these apply after your skills, and they need to work differently so they can't be used to "update" your skills midgame.
 function meta:ApplyTrinkets(override)
-	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
+    if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
+    
+    -- Save the exact health values before the gamemode recalculates them
+    local oldMaxHealth = self:GetMaxHealth()
+    local oldHealth = self:Health()
 
-	local allskills = GAMEMODE.Skills
-	local current_active = self:GetActiveSkills()
-	local real_assoc = table.ToAssoc(current_active)
+	local oldMaxBloodArmor = self.MaxBloodArmor or 0
+    local oldBloodArmor = self:GetBloodArmor() or 0
+    
+    local allskills = GAMEMODE.Skills
+    local current_active = self:GetActiveSkills()
 
-	if not override then
-		for skillid, skilltbl in pairs(allskills) do
-			if skilltbl.Trinket then
-				local hastrinket = self:HasTrinket(skilltbl.Trinket)
-				real_assoc[skillid] = hastrinket and true or nil
+    local real_assoc = table.ToAssoc(current_active)
 
-				if SERVER then
-					if skilltbl.PairedWeapon then
-						local pairedwep = "weapon_zs_t_"..skilltbl.Trinket
-						if hastrinket and not self:HasWeapon(pairedwep) then
-							self:Give(pairedwep)
-						elseif not hastrinket and self:HasWeapon(pairedwep) then
-							self:StripWeapon(pairedwep)
-						end
-					end
+    if not override then
+        for skillid, skilltbl in pairs(allskills) do
+            if skilltbl.Trinket then
+                local hastrinket = self:HasTrinket(skilltbl.Trinket)
+                real_assoc[skillid] = hastrinket and true or nil
 
-					if hastrinket and skilltbl.Status then
-						self:CreateTrinketStatus(skilltbl.Status)
-					end
-				end
-			end
-		end
-	end
+                if SERVER then
+                    if skilltbl.PairedWeapon then
+                        local pairedwep = "weapon_zs_t_"..skilltbl.Trinket
+                        if hastrinket and not self:HasWeapon(pairedwep) then
+                            self:Give(pairedwep)
+                        elseif not hastrinket and self:HasWeapon(pairedwep) then
+                            self:StripWeapon(pairedwep)
+                        end
+                    end
 
-	self:ApplyAssocModifiers(real_assoc)
+                    if hastrinket and skilltbl.Status then
+                        self:CreateTrinketStatus(skilltbl.Status)
+                    end
+                end
+            end
+        end
+    end
 
-	local funcs
-	local gm_functions = GAMEMODE.SkillFunctions
-	for skillid in pairs(allskills) do
+    -- This function resets max health to base and adds trinket bonuses
+    self:ApplyAssocModifiers(real_assoc)
 
-		funcs = gm_functions[skillid]
-		if funcs then
-			if not real_assoc[skillid] then -- On but we want it off.
-				for _, func in pairs(funcs) do
-					func(self, false)
-				end
-			elseif real_assoc[skillid] then -- Off but we want it on.
-				for _, func in pairs(funcs) do
-					func(self, true)
-				end
-			end
-		end
-	end
+    local funcs
+    local gm_functions = GAMEMODE.SkillFunctions
+    for skillid in pairs(allskills) do
+        funcs = gm_functions[skillid]
+        if funcs then
+            if not real_assoc[skillid] then -- On but we want it off.
+                for _, func in pairs(funcs) do
+                    func(self, false)
+                end
+            elseif real_assoc[skillid] then -- Off but we want it on.
+                for _, func in pairs(funcs) do
+                    func(self, true)
+                end
+            end
+        end
+    end
+
+    -- Handle Juggernaut logic locally for this specific player
+    if self.IsJuggernaut then
+        local mul = self.JuggernautMul or 10
+        
+        -- === HEALTH LOGIC ===
+        local baseHealth = self.JuggernautBaseHealth or 100 
+        local rawMaxHealth = self:GetMaxHealth() 
+        
+        local trinketBonusHP = rawMaxHealth - baseHealth
+        if trinketBonusHP < 0 then trinketBonusHP = 0 end
+        
+        local finalMaxHealth = (baseHealth * mul) + trinketBonusHP 
+        local healthDiff = finalMaxHealth - oldMaxHealth
+        
+        self:SetMaxHealth(finalMaxHealth)
+        
+        if healthDiff > 0 then
+            self:SetHealth(oldHealth + healthDiff)
+        else
+            self:SetHealth(math.min(oldHealth + healthDiff, finalMaxHealth))
+        end
+
+        -- === BLOOD ARMOR LOGIC ===
+        local baseBA = self.JuggernautBaseBloodArmor or 0
+        local rawMaxBA = self.MaxBloodArmor or 0
+        
+        local trinketBonusBA = rawMaxBA - baseBA
+        if trinketBonusBA < 0 then trinketBonusBA = 0 end
+        
+        local finalMaxBA = (baseBA * mul) + trinketBonusBA
+        local baDiff = finalMaxBA - oldMaxBloodArmor
+        
+        self.MaxBloodArmor = finalMaxBA
+
+		if SERVER then
+            self:SetNWInt("JuggMaxBA", finalMaxBA)
+        end
+        
+        if baDiff > 0 then
+            self:SetBloodArmor(oldBloodArmor + baDiff)
+        else
+            -- Ensure we don't exceed the new maximum if they dropped an armor trinket
+            local newBA = oldBloodArmor + baDiff
+            if newBA > finalMaxBA then newBA = finalMaxBA end
+            if newBA < 0 then newBA = 0 end
+            
+            self:SetBloodArmor(newBA)
+        end
+    end
 end
 
 function meta:CanSkillsRemort()

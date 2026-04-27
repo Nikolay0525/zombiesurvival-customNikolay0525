@@ -152,7 +152,7 @@ hook.Add("HUDPaint", "JuggernautCountdownUI", function()
     countdownScale = math.Approach(countdownScale, 1, FrameTime() * 5)
     
     -- Використовуємо нік у тексті
-    local text = juggName .. " СТАНЕТ ДЖАГЕРНАУТОМ ЧЕРЕЗ: " .. countdownNum
+    local text = juggName .. translate.Get("become_juggernaut") .. countdownNum
     surface.SetFont("ZS3D2DFont2Small") 
     
     draw.SimpleText(text, "ZS3D2DFont2Small", w/2 + 2, h/4 + 2, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -966,8 +966,11 @@ function GM:HumanHUD(screenscale)
 			local txth = draw_GetFontHeight("ZSHUDFontSmall")
 			local desiredzombies = self:GetDesiredStartingZombies()
 
-			draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
-
+			if GetGlobalBool("IsPausedMidGame", false) then
+				draw_SimpleTextBlurry(translate.Get("game_on_pause"), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			else
+				draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			end
 			if desiredzombies > 0 then
 				draw_SimpleTextBlurry(translate.Get(self:HasSigils() and "humans_furthest_from_sigils_are_zombies" or "humans_closest_to_spawns_are_zombies"), "ZSHUDFontSmall", w * 0.5, h * 0.25 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
 				draw_SimpleTextBlurry(translate.Format("number_of_initial_zombies_this_game", self.WaveOneZombies * 100, desiredzombies), "ZSHUDFontSmall", w * 0.5, h * 0.7, COLOR_GRAY, TEXT_ALIGN_CENTER)
