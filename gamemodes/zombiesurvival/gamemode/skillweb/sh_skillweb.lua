@@ -271,10 +271,10 @@ function meta:ApplyTrinkets(override)
         end
         
         if baDiff > 0 then
-            self:SetBloodArmor(oldBloodArmor + baDiff)
+            self:SetBloodArmor(oldBloodArmor + (1 +  (baDiff * ( oldBloodArmor / self.MaxBloodArmor))))
         else
             -- Ensure we don't exceed the new maximum if they dropped an armor trinket
-            local newBA = oldBloodArmor + baDiff
+            local newBA = oldBloodArmor + (1 + (baDiff * ( oldBloodArmor / self.MaxBloodArmor)))
             if newBA > finalMaxBA then newBA = finalMaxBA end
             if newBA < 0 then newBA = 0 end
             
